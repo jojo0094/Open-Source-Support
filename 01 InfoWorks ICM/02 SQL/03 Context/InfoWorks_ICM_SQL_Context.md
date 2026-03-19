@@ -165,14 +165,31 @@ SPATIAL NONE;
 //Spatial Search: Contains, Network layer, All Nodes
 //Spatial Search: Cross, Network layer, Conduit
 //Spatial Search: Intersects, Network layer, Polygon
+
+// Deselect objects inside a specific polygon (Object Type must be Polygon)
+SPATIAL inside Network polygon;
+DESELECT FROM [All Links] WHERE spatial.polygon_id = 'P1';
+DESELECT FROM [All Nodes] WHERE spatial.polygon_id = 'P1';
+SPATIAL NONE;
 ```
 
-**Spatial Contexts:**
+**Spatial Contexts (dialog Spatial Search options):**
 - `Distance` - Within specified distance
 - `Contains` - Spatial containment
 - `Cross` - Crossing/intersecting
 - `Intersects` - Geometric intersection
+- `Inside` - Object is inside the search area
+
+**Programmatic `SPATIAL` command valid join types:**
+- `Distance` - `SPATIAL Distance Network [object] radius`
+- `inside` - `SPATIAL inside Network [object]` (confirmed valid)
+- `Contains`, `Cross` - may be valid; `Intersects` is NOT valid programmatically
 - `SPATIAL NONE` - Clear spatial filter
+
+**`DESELECT FROM` usage:**
+- `DESELECT FROM [All Links]` — removes all conduits from the current selection (respects active SPATIAL filter)
+- `DESELECT FROM [All Nodes]` — removes all nodes from the current selection (respects active SPATIAL filter)
+- `DESELECT FROM polygon` — clears polygon selection
 
 ### 8. **Selection Management**
 
@@ -366,6 +383,7 @@ PROMPT LINE $MyRoadSelection 'Enter Road Name:' STRING LIST $MyRoad;
 - `PROMPT LINE $var "label"` - Input field
 - `PROMPT LINE $var "label" LIST $list` - Dropdown selection
 - `PROMPT LINE $var "label" STRING LIST $list` - String list selection
+- **Note:** if a variable is pre-declared with `LET`, do not specify a type on `PROMPT LINE` — it will error. If you need a specific type (e.g. `STRING`), declare it on `PROMPT LINE` without a prior `LET`. Use `LET` only for numeric variables that don't need a type annotation on the prompt.
 - `PROMPT LINE $var "label" DP n` - Numeric with decimal places
 - `PROMPT DISPLAY` - Show dialog
 - `PROMPT DISPLAY READONLY` - Show read-only (OK/Cancel)
