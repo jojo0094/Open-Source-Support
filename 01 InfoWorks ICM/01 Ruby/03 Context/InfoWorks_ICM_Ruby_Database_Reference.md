@@ -256,7 +256,7 @@ net.row_objects('hw_conduit')     # Works!
 | 2D boundary | `hw_2d_boundary_line` | 2D Boundary Line Data Fields |
 | Network results line (2D) | `hw_2d_results_line` | Network Results Line (2D) Data Fields |
 | 2D line source | `hw_2d_line_source` | 2D Line Source Data Fields |
-| 2D line connect | `hv_2d_line_connect` | 2D Line Connect Data Fields |
+| 2D line connect | `hw_2d_connect_line` | 2D Line Connect Data Fields |
 | Head unit flow | `hw_head_unit_discharge` | Head Unit Flow Data Fields |
 
 **Points Grid:**
