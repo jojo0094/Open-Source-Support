@@ -80,9 +80,9 @@ To remove a field, simply delete its corresponding line from the array. To chang
 
 ![alt text](image-4.png)
 
-![![alt text](image-3.png)
+![alt text](image-3.png)
     
-](image-2.png)
+![alt text](image-2.png)
 
 ![alt text](image-5.png)
 
