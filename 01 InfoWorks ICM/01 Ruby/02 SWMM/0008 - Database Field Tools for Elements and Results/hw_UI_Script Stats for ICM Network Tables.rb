@@ -1,5 +1,5 @@
 # Accessing current network
-net = WSApplication.WSApplication.current_network 
+net = WSApplication.current_network 
 raise "Error: current network not found" if net.nil?
 
 tables = [
@@ -24,7 +24,6 @@ begin
 
     # Iterate over each row object and sum up the parameters
     nodes_ro.each do |node|
-      node.
       total_length += node.length.to_f if node.respond_to?(:length)
       total_area += node.area.to_f if node.respond_to?(:area)
       total_volume += node.volume.to_f if node.respond_to?(:volume)
