@@ -318,7 +318,7 @@ net.row_objects('hw_conduit')     # Works!
 | 2D zone | `sw_2d_zone` | 2D Zone Data Fields (SWMM) |
 | Roughness zone | `sw_roughness_zone` | Roughness Zone Data Fields (SWMM) |
 | Roughness definitions | `sw_roughness_definition` | Roughness Definition Data Fields (SWMM) |
-| Mesh zone | `sw_mesh_zone` | Mesh Zone Data Fields SWMM) |
+| Mesh zone | `sw_mesh_zone` | Mesh Zone Data Fields (SWMM) |
 | Mesh level zone | `sw_mesh_level_zone` | Mesh Level Zone Data Fields (SWMM) |
 | Porous polygon | `sw_porous_polygon` | Porous Polygon Data Fields (SWMM) |
 
