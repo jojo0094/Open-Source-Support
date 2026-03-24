@@ -339,9 +339,7 @@ net.row_objects('hw_conduit')     # Works!
 | Network Object | Database Table Name | Data Fields Topic |
 |----------------|---------------------|-------------------|
 | Options | `sw_options` | Options Data Fields (SWMM) |
-| Controls | `sw_controls` | Controls Data Fields (SWMM) |
 | Snow parameters | `sw_snow_parameters` | Snow Parameters Data Fields (SWMM) |
-| Title | `sw_title` | Title Data Fields (SWMM) |
 
 ### SWMM WSStructure (Blob / Nested) Fields
 
