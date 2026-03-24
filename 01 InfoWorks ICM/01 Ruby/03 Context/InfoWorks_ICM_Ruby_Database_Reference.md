@@ -151,6 +151,8 @@ net.row_objects('hw_conduit')     # Works!
 - **InfoWorks Networks** - Table names start with `hw_` (e.g., `'hw_conduit'`)
 - **SWMM Networks** - Table names start with `sw_` (e.g., `'sw_conduit'`)
 
+> **SCOPE WARNING:** InfoWorks (`hw_*`) and SWMM (`sw_*`) are completely separate schemas. If the user's network type is unknown, ask first. Once confirmed, only use table names and examples from that network type — never substitute one for the other.
+
 ### Lookup Methodology
 
 **Step 1:** Identify object type from user query  
