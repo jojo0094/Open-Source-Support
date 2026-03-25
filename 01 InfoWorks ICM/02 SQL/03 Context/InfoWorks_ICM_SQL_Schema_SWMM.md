@@ -515,7 +515,7 @@ Unless stated otherwise for a specific object, every `sw_*` network object in th
 | Underdrain close depth | `underdrain_close_depth` | scalar | Underdrain |
 | Underdrain open depth | `underdrain_open_depth` | scalar | Underdrain |
 | Underdrain control curve | `underdrain_control_curve` | scalar | Underdrain |
-| Underdrain pollutant removal | `underdrain_poll_removal` | blob | WSStructure |
+| Underdrain pollutant removal | `underdrain_poll_removal` | blob | Sub-fields: `underdrain_poll_removal.pollutant`, `underdrain_poll_removal.removal_percent` |
 | Mat thickness | `drainagemat_thickness` | scalar | Drainage mat |
 | Mat void fraction | `drainagemat_void_fraction` | scalar | Drainage mat |
 | Mat roughness (Manning's n) | `drainagemat_roughness` | scalar | Drainage mat |
