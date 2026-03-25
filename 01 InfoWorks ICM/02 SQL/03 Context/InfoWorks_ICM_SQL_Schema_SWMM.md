@@ -131,43 +131,43 @@ All SWMM field tables are indexed here. For common fields (`user_text_*`, `user_
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
 | Node ID | `node_id` | scalar | |
-| Node Type | `node_type` | scalar | 'JUNCTION', 'OUTFALL', 'DIVIDER', 'STORAGE' |
-| X Coordinate | `x` | scalar | |
-| Y Coordinate | `y` | scalar | |
-| Route Subcatchment | `route_subcatchment` | scalar | |
-| Unit Hydrograph ID | `unit_hydrograph_id` | scalar | linked UH group |
-| Unit Hydrograph Area | `unit_hydrograph_area` | scalar | |
-| Ground Level | `ground_level` | scalar | |
-| Invert Elevation | `invert_elevation` | scalar | SWMM node invert |
-| Maximum Depth | `maximum_depth` | scalar | SWMM node depth |
-| Surcharge Depth | `surcharge_depth` | scalar | SWMM surcharge depth |
-| Initial Depth | `initial_depth` | scalar | SWMM initial condition |
-| Ponded Area | `ponded_area` | scalar | surface flooding ponded area |
-| Flood Type | `flood_type` | scalar | |
-| Flooding Discharge Coefficient | `flooding_discharge_coeff` | scalar | |
-| Evaporation Factor | `evaporation_factor` | scalar | |
-| Initial Moisture Deficit | `initial_moisture_deficit` | scalar | Green-Ampt infiltration |
-| Suction Head | `suction_head` | scalar | Green-Ampt infiltration |
-| Conductivity | `conductivity` | scalar | Green-Ampt saturated hydraulic conductivity |
-| Outfall Type | `outfall_type` | scalar | 'FREE', 'NORMAL', 'FIXED', 'TIDAL', 'TIMESERIES' |
-| Flap Gate | `flap_gate` | scalar | outfall flap gate |
-| Tidal Curve ID | `tidal_curve_id` | scalar | outfall using sw_curve_tidal |
-| Fixed Stage | `fixed_stage` | scalar | outfall fixed stage level |
-| Storage Type | `storage_type` | scalar | 'TABULAR', 'FUNCTIONAL' |
-| Storage Curve | `storage_curve` | scalar | links to sw_curve_storage |
-| Functional Coefficient | `functional_coefficient` | scalar | A×H^B + C |
-| Functional Constant | `functional_constant` | scalar |  |
-| Functional Exponent | `functional_exponent` | scalar |  |
-| Inflow Baseline | `inflow_baseline` | scalar | DWF baseline inflow |
-| Inflow Scaling | `inflow_scaling` | scalar | DWF scaling factor |
-| Inflow Pattern | `inflow_pattern` | scalar | DWF pattern ID |
-| Base Flow | `base_flow` | scalar |  |
-| Base Flow Pattern 1 | `bf_pattern_1` | scalar |  |
-| Base Flow Pattern 2 | `bf_pattern_2` | scalar |  |
-| Base Flow Pattern 3 | `bf_pattern_3` | scalar |  |
-| Base Flow Pattern 4 | `bf_pattern_4` | scalar |  |
+| Node type | `node_type` | scalar | 'Junction', 'Outfall', 'Storage' |
+| x | `x` | scalar | |
+| y | `y` | scalar | |
+| Route to subcatchment | `route_subcatchment` | scalar | |
+| Unit hydrograph | `unit_hydrograph_id` | scalar | linked UH group |
+| Sewershed contributing area | `unit_hydrograph_area` | scalar | |
+| Ground level | `ground_level` | scalar | |
+| Invert elevation | `invert_elevation` | scalar | SWMM node invert |
+| Max depth | `maximum_depth` | scalar | SWMM node depth |
+| Surcharge depth | `surcharge_depth` | scalar | SWMM surcharge depth |
+| Initial water depth | `initial_depth` | scalar | SWMM initial condition |
+| Ponded area | `ponded_area` | scalar | surface flooding ponded area |
+| Flood type | `flood_type` | scalar | 'Lost', '2D' |
+| Flooding discharge coefficient | `flooding_discharge_coeff` | scalar | |
+| Evaporation factor | `evaporation_factor` | scalar | |
+| Initial moisture deficit | `initial_moisture_deficit` | scalar | Green-Ampt infiltration |
+| Capillary suction | `suction_head` | scalar | Green-Ampt infiltration |
+| Hydraulic conductivity | `conductivity` | scalar | Green-Ampt saturated hydraulic conductivity |
+| Outfall type | `outfall_type` | scalar | 'FREE', 'NORMAL', 'FIXED', 'TIDAL', 'TIMESERIES' |
+| Tide gate | `flap_gate` | scalar | outfall flap gate |
+| Tidal curve | `tidal_curve_id` | scalar | outfall using sw_curve_tidal |
+| Fixed stage | `fixed_stage` | scalar | outfall fixed stage level |
+| Storage type | `storage_type` | scalar | 'TABULAR', 'FUNCTIONAL' |
+| Storage curve | `storage_curve` | scalar | links to sw_curve_storage |
+| Coeff of shape function | `functional_coefficient` | scalar | A×H^B + C |
+| Constant of shape function | `functional_constant` | scalar |  |
+| Exponent of shape function | `functional_exponent` | scalar |  |
+| Baseline inflow | `inflow_baseline` | scalar | DWF baseline inflow |
+| Inflow scale factor | `inflow_scaling` | scalar | DWF scaling factor |
+| Inflow pattern | `inflow_pattern` | scalar | DWF pattern ID |
+| Base flow | `base_flow` | scalar |  |
+| Base flow pattern 1 | `bf_pattern_1` | scalar |  |
+| Base flow pattern 2 | `bf_pattern_2` | scalar |  |
+| Base flow pattern 3 | `bf_pattern_3` | scalar |  |
+| Base flow pattern 4 | `bf_pattern_4` | scalar |  |
 | Treatment | `treatment` | blob | Sub-fields: `treatment.pollutant`, `treatment.result`, `treatment.function` |
-| Pollutant Inflows | `pollutant_inflows` | blob | Sub-fields: `pollutant_inflows.pollutant` |
+| Pollutant inflow | `pollutant_inflows` | blob | Sub-fields: `pollutant_inflows.pollutant` |
 | Additional DWF | `additional_dwf` | blob | Sub-fields: `.baseline`, `.bf_pattern_1`–`4` |
 | Pollutant DWF | `pollutant_dwf` | blob | Sub-fields: `pollutant_dwf.pollutant` |
 
@@ -177,46 +177,46 @@ All SWMM field tables are indexed here. For common fields (`user_text_*`, `user_
 
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
-| ID | `id` | scalar | Group identifier |
-| Rain Gage ID | `raingage_id` | scalar | Linked rain gage |
-| Unit Hydrograph All | `uh_all` | scalar | Group reference for all months |
-| Unit Hydrograph Jan | `uh_jan` | scalar | Monthly group reference |
-| Unit Hydrograph Feb | `uh_feb` | scalar | Monthly group reference |
-| Unit Hydrograph Mar | `uh_mar` | scalar | Monthly group reference |
-| Unit Hydrograph Apr | `uh_apr` | scalar | Monthly group reference |
-| Unit Hydrograph May | `uh_may` | scalar | Monthly group reference |
-| Unit Hydrograph Jun | `uh_jun` | scalar | Monthly group reference |
-| Unit Hydrograph Jul | `uh_jul` | scalar | Monthly group reference |
-| Unit Hydrograph Aug | `uh_aug` | scalar | Monthly group reference |
-| Unit Hydrograph Sep | `uh_sep` | scalar | Monthly group reference |
-| Unit Hydrograph Oct | `uh_oct` | scalar | Monthly group reference |
-| Unit Hydrograph Nov | `uh_nov` | scalar | Monthly group reference |
-| Unit Hydrograph Dec | `uh_dec` | scalar | Monthly group reference |
+| UH group ID | `id` | scalar | Group identifier |
+| Rain gage | `raingage_id` | scalar | Linked rain gage |
+| All months unit hydrograph | `uh_all` | scalar | Group reference for all months |
+| January unit hydrograph | `uh_jan` | scalar | Monthly group reference |
+| February unit hydrograph | `uh_feb` | scalar | Monthly group reference |
+| March unit hydrograph | `uh_mar` | scalar | Monthly group reference |
+| April unit hydrograph | `uh_apr` | scalar | Monthly group reference |
+| May unit hydrograph | `uh_may` | scalar | Monthly group reference |
+| June unit hydrograph | `uh_jun` | scalar | Monthly group reference |
+| July unit hydrograph | `uh_jul` | scalar | Monthly group reference |
+| August unit hydrograph | `uh_aug` | scalar | Monthly group reference |
+| September unit hydrograph | `uh_sep` | scalar | Monthly group reference |
+| October unit hydrograph | `uh_oct` | scalar | Monthly group reference |
+| November unit hydrograph | `uh_nov` | scalar | Monthly group reference |
+| December unit hydrograph | `uh_dec` | scalar | Monthly group reference |
 
 #### Unit Hydrograph (`sw_uh`)
 
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
-| Group ID | `group_id` | scalar | Parent group identifier |
+| UH group | `group_id` | scalar | Parent group identifier |
 | Month | `month` | scalar | Month selector |
-| R1 | `R1` | scalar | RTK parameter |
-| T1 | `T1` | scalar | RTK parameter |
-| K1 | `K1` | scalar | RTK parameter |
-| R2 | `R2` | scalar | RTK parameter |
-| T2 | `T2` | scalar | RTK parameter |
-| K2 | `K2` | scalar | RTK parameter |
-| R3 | `R3` | scalar | RTK parameter |
-| T3 | `T3` | scalar | RTK parameter |
-| K3 | `K3` | scalar | RTK parameter |
-| Dmax1 | `Dmax1` | scalar | RTK parameter |
-| Drec1 | `Drec1` | scalar | RTK parameter |
-| D01 | `D01` | scalar | RTK parameter |
-| Dmax2 | `Dmax2` | scalar | RTK parameter |
-| Drec2 | `Drec2` | scalar | RTK parameter |
-| D02 | `D02` | scalar | RTK parameter |
-| Dmax3 | `Dmax3` | scalar | RTK parameter |
-| Drec3 | `Drec3` | scalar | RTK parameter |
-| D03 | `D03` | scalar | RTK parameter |
+| Response ratio R - short term | `R1` | scalar | RTK parameter |
+| Time to peak T - short term | `T1` | scalar | RTK parameter |
+| Recession limb ratio K - short term | `K1` | scalar | RTK parameter |
+| Response ratio R - medium term | `R2` | scalar | RTK parameter |
+| Time to peak T - medium term | `T2` | scalar | RTK parameter |
+| Recession limb ratio K - medium term | `K2` | scalar | RTK parameter |
+| Response ratio R - long term | `R3` | scalar | RTK parameter |
+| Time to peak T - long term | `T3` | scalar | RTK parameter |
+| Recession limb ratio K - long term | `K3` | scalar | RTK parameter |
+| Max initial abstraction depth - short term | `Dmax1` | scalar | RTK parameter |
+| Initial abstraction recovery rate - short term | `Drec1` | scalar | RTK parameter |
+| Initial abstraction depth - short term | `D01` | scalar | RTK parameter |
+| Max initial abstraction depth - medium term | `Dmax2` | scalar | RTK parameter |
+| Initial abstraction recovery rate - medium term | `Drec2` | scalar | RTK parameter |
+| Initial abstraction depth - medium term | `D02` | scalar | RTK parameter |
+| Max initial abstraction depth - long term | `Dmax3` | scalar | RTK parameter |
+| Initial abstraction recovery rate - long term | `Drec3` | scalar | RTK parameter |
+| Initial abstraction depth - long term | `D03` | scalar | RTK parameter |
 
 #### Storage Curve (`sw_curve_storage`)
 
@@ -231,8 +231,8 @@ All SWMM field tables are indexed here. For common fields (`user_text_*`, `user_
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
 | ID | `id` | scalar | Tidal curve identifier |
-| Hour | `data.hour` | blob | Curve data field |
-| Elevation | `data.elevation` | blob | Curve data field |
+| Hour of day | `data.hour` | blob | Curve data field |
+| Water surface elevation | `data.elevation` | blob | Curve data field |
 
 ### Links
 
@@ -242,42 +242,47 @@ All SWMM field tables are indexed here. For common fields (`user_text_*`, `user_
 
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
-| ID | `id` | scalar | SWMM conduit identifier; InfoWorks uses `link_suffix` |
-| Upstream Node ID | `us_node_id` | scalar | |
-| Downstream Node ID | `ds_node_id` | scalar | |
+| Link ID | `id` | scalar | SWMM conduit identifier; InfoWorks uses `link_suffix` |
+| Start node | `us_node_id` | scalar | |
+| End node | `ds_node_id` | scalar | |
 | Length | `length` | scalar | SWMM conduit length; InfoWorks uses `conduit_length` |
-| Shape | `shape` | scalar | SWMM cross-section shape code |
-| Width / Diameter | `conduit_width` | scalar | Confirmed in SWMM SQL scripts; NOT `geom1` |
-| Height | `conduit_height` | scalar | Confirmed in SWMM SQL scripts; NOT `geom2` |
-| Number of Barrels | `number_of_barrels` | scalar | NOT `barrels` |
-| Upstream Invert | `us_invert` | scalar | |
-| Downstream Invert | `ds_invert` | scalar | |
+| Shape | `shape` | scalar | 'Custom', 'Irregular', 'Circular', 'Force_main', 'Filled_Circular', 'Rect_closed', 'Rect_open', 'Trapezoidal', 'Triangular', 'Horiz_ellipse', 'Vert_ellipse', 'Arch', 'Parabolic', 'Power', 'Rect_triangular', 'Rect_round', 'ModBasketHandle', 'Egg', 'Horseshoe', 'Gothic', 'Catenary', 'Semielliptical', 'Baskethandle', 'Semicircular', 'Dummy' |
+| Conduit width | `conduit_width` | scalar | Confirmed in SWMM SQL scripts; NOT `geom1` |
+| Conduit height | `conduit_height` | scalar | Confirmed in SWMM SQL scripts; NOT `geom2` |
+| Number of barrels | `number_of_barrels` | scalar | NOT `barrels` |
+| Upstream elevation | `us_invert` | scalar | |
+| Downstream elevation | `ds_invert` | scalar | |
 | Manning's N | `Mannings_N` | scalar | Note case: capital M and N; confirmed from SWMM SQL scripts |
-| Bottom Manning's N | `bottom_mannings_N` | scalar | composite roughness |
-| Roughness Depth Threshold | `roughness_depth_threshold` | scalar |  |
-| Darcy-Weisbach Roughness | `roughness_DW` | scalar |  |
-| Hazen-Williams Roughness | `roughness_HW` | scalar |  |
-| US Headloss Coefficient | `us_headloss_coeff` | scalar | |
-| DS Headloss Coefficient | `ds_headloss_coeff` | scalar | |
-| Average Headloss Coefficient | `av_headloss_coeff` | scalar |  |
-| Initial Flow | `initial_flow` | scalar | initial condition |
-| Max Flow | `max_flow` | scalar | flow limit |
-| Sediment Depth | `sediment_depth` | scalar |  |
-| Seepage Rate | `seepage_rate` | scalar |  |
-| Culvert Code | `culvert_code` | scalar |  |
-| Flap Gate | `flap_gate` | scalar |  |
+| Low depth Manning's N | `bottom_mannings_N` | scalar | composite roughness |
+| Depth threshold | `roughness_depth_threshold` | scalar |  |
+| Roughness D-W | `roughness_DW` | scalar |  |
+| Roughness H-W | `roughness_HW` | scalar |  |
+| US headloss coefficient | `us_headloss_coeff` | scalar | |
+| DS headloss coefficient | `ds_headloss_coeff` | scalar | |
+| Average headloss coefficient | `av_headloss_coeff` | scalar |  |
+| Initial flow | `initial_flow` | scalar | initial condition |
+| Maximum flow | `max_flow` | scalar | flow limit |
+| Sediment depth | `sediment_depth` | scalar |  |
+| Seepage rate | `seepage_rate` | scalar |  |
+| Culvert code | `culvert_code` | scalar |  |
+| Flap valve | `flap_gate` | scalar |  |
 | Branch ID | `branch_id` | scalar |  |
 | Transect | `transect` | scalar | for IRREGULAR shape |
-| Top Radius | `top_radius` | scalar | for ARCH shapes |
-| Left Slope | `left_slope` | scalar | for TRAPEZOIDAL shape |
-| Right Slope | `right_slope` | scalar | for TRAPEZOIDAL shape |
-| Triangle Height | `triangle_height` | scalar | for TRIANGULAR shape |
-| Bottom Radius | `bottom_radius` | scalar |  |
-| Shape Curve | `shape_curve` | scalar | custom shape curve ID |
-| Shape Exponent | `shape_exponent` | scalar |  |
-| Horizontal Ellipse Size | `horiz_ellipse_size_code` | scalar | EPA SWMM standard size code |
-| Vertical Ellipse Size | `vert_ellipse_size_code` | scalar |  |
-| Arch Material | `arch_material` | scalar | for ARCH shapes |
+| Top radius | `top_radius` | scalar | for ARCH shapes |
+| Left slope | `left_slope` | scalar | for TRAPEZOIDAL shape |
+| Right slope | `right_slope` | scalar | for TRAPEZOIDAL shape |
+| Triangle height | `triangle_height` | scalar | for TRIANGULAR shape |
+| Bottom radius | `bottom_radius` | scalar |  |
+| Shape curve | `shape_curve` | scalar | custom shape curve ID |
+| Shape exponent | `shape_exponent` | scalar |  |
+| Horizontal ellipse size code | `horiz_ellipse_size_code` | scalar | EPA SWMM standard size code |
+| Vertical ellipse size code | `vert_ellipse_size_code` | scalar |  |
+| Standard size material | `arch_material` | scalar | for ARCH shapes |
+| Concrete size code | `arch_concrete_size_code` | scalar | for ARCH shapes |
+| Plate 18 size code | `arch_plate_18_size_code` | scalar | for ARCH shapes |
+| Plate 31 size code | `arch_plate_31_size_code` | scalar | for ARCH shapes |
+| Steel 1/2 inch size code | `arch_steel_half_size_code` | scalar | for ARCH shapes |
+| Steel inch size code | `arch_steel_inch_size_code` | scalar | for ARCH shapes |
 
 > Common data fields (`user_text_1`–`10`, `user_number_1`–`10`, `notes`, `hyperlinks`) apply to this object — see `Schema_Common.md`.
 
@@ -285,46 +290,46 @@ All SWMM field tables are indexed here. For common fields (`user_text_*`, `user_
 
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
-| ID | `id` | scalar | SWMM object identifier |
-| Upstream Node ID | `us_node_id` | scalar | Common link identifier |
-| Downstream Node ID | `ds_node_id` | scalar | Common link identifier |
-| Ideal Pump | `ideal` | scalar | Ideal pump flag |
-| Pump Curve | `pump_curve` | scalar | Linked pump curve |
-| Initial Status | `initial_status` | scalar | SWMM control/status field |
-| Start Up Depth | `start_up_depth` | scalar | SWMM control depth |
-| Shut Off Depth | `shut_off_depth` | scalar | SWMM control depth |
+| Link ID | `id` | scalar | SWMM object identifier |
+| Start node | `us_node_id` | scalar | Common link identifier |
+| End node | `ds_node_id` | scalar | Common link identifier |
+| Ideal pump | `ideal` | scalar | Ideal pump flag |
+| Pump curve ID | `pump_curve` | scalar | Linked pump curve |
+| Initial status | `initial_status` | scalar | SWMM control/status field |
+| Startup depth | `start_up_depth` | scalar | SWMM control depth |
+| Shutoff depth | `shut_off_depth` | scalar | SWMM control depth |
 | Branch ID | `branch_id` | scalar | Branch/control field |
 
 #### Orifice (`sw_orifice`)
 
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
-| ID | `id` | scalar | SWMM object identifier |
-| Upstream Node ID | `us_node_id` | scalar | Common link identifier |
-| Downstream Node ID | `ds_node_id` | scalar | Common link identifier |
+| Link ID | `id` | scalar | SWMM object identifier |
+| Start node | `us_node_id` | scalar | Common link identifier |
+| End node | `ds_node_id` | scalar | Common link identifier |
 | Type | `link_type` | scalar | Orifice type |
 | Shape | `shape` | scalar | Orifice shape field |
-| Orifice Height | `orifice_height` | scalar | Physical geometry field |
-| Orifice Width | `orifice_width` | scalar | Physical geometry field |
-| Invert | `invert` | scalar | Hydraulic geometry field |
-| Discharge Coefficient | `discharge_coeff` | scalar | Hydraulic parameter |
-| Flap Gate | `flap_gate` | scalar | Control field |
-| Time To Open | `time_to_open` | scalar | Control field |
+| Orifice height | `orifice_height` | scalar | Physical geometry field |
+| Orifice width | `orifice_width` | scalar | Physical geometry field |
+| Invert level | `invert` | scalar | Hydraulic geometry field |
+| Discharge coefficient | `discharge_coeff` | scalar | Hydraulic parameter |
+| Flap gate | `flap_gate` | scalar | Control field |
+| Time to open | `time_to_open` | scalar | Control field |
 | Branch ID | `branch_id` | scalar | Branch/control field |
 
 #### Outlet (`sw_outlet`)
 
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
-| ID | `id` | scalar | SWMM object identifier |
-| Upstream Node ID | `us_node_id` | scalar | Common link identifier |
-| Downstream Node ID | `ds_node_id` | scalar | Common link identifier |
-| Start Level | `start_level` | scalar | Outlet level field |
-| Flap Gate | `flap_gate` | scalar | Control field |
-| Rating Curve Type | `rating_curve_type` | scalar | Curve selector |
-| Head Discharge ID | `head_discharge_id` | scalar | Linked curve table |
-| Discharge Coefficient | `discharge_coefficient` | scalar | Hydraulic parameter |
-| Discharge Exponent | `discharge_exponent` | scalar | Hydraulic parameter |
+| Link ID | `id` | scalar | SWMM object identifier |
+| Start node | `us_node_id` | scalar | Common link identifier |
+| End node | `ds_node_id` | scalar | Common link identifier |
+| Outlet height | `start_level` | scalar | Outlet level field |
+| Flap gate | `flap_gate` | scalar | Control field |
+| Rating curve type | `rating_curve_type` | scalar | Curve selector |
+| Rating curve | `head_discharge_id` | scalar | Linked curve table |
+| Coef of outlet function | `discharge_coefficient` | scalar | Hydraulic parameter |
+| Exp of outlet function | `discharge_exponent` | scalar | Hydraulic parameter |
 | Branch ID | `branch_id` | scalar | Branch/control field |
 
 #### Weir (`sw_weir`)
