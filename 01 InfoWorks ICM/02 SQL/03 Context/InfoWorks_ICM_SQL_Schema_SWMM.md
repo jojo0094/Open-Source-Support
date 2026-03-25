@@ -171,9 +171,9 @@ Unless stated otherwise for a specific object, every `sw_*` network object in th
 | Base flow pattern 3 | `bf_pattern_3` | scalar |  |
 | Base flow pattern 4 | `bf_pattern_4` | scalar |  |
 | Treatment | `treatment` | blob | Sub-fields: `treatment.pollutant`, `treatment.result`, `treatment.function` |
-| Pollutant inflow | `pollutant_inflows` | blob | Sub-fields: `pollutant_inflows.pollutant` |
-| Additional DWF | `additional_dwf` | blob | Sub-fields: `.baseline`, `.bf_pattern_1`–`4` |
-| Pollutant DWF | `pollutant_dwf` | blob | Sub-fields: `pollutant_dwf.pollutant` |
+| Pollutant inflow | `pollutant_inflows` | blob | Sub-fields: `pollutant_inflows.pollutant`, `pollutant_inflows.baseline`, `pollutant_inflows.baseline_pattern`, `pollutant_inflows.mass_units_factor`, `pollutant_inflows.scaling` |
+| Additional DWF | `additional_dwf` | blob | Sub-fields: `additional_dwf.baseline`, `additional_dwf.bf_pattern_1`, `additional_dwf.bf_pattern_2`, `additional_dwf.bf_pattern_3`, `additional_dwf.bf_pattern_4` |
+| Pollutant DWF | `pollutant_dwf` | blob | Sub-fields: `pollutant_dwf.pollutant`, `pollutant_dwf.baseline`, `pollutant_dwf.bf_pattern_1`, `pollutant_dwf.bf_pattern_2`, `pollutant_dwf.bf_pattern_3`, `pollutant_dwf.bf_pattern_4` |
 
 #### Unit Hydrograph Group (`sw_uh_group`)
 
@@ -416,9 +416,9 @@ Unless stated otherwise for a specific object, every `sw_*` network object in th
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
 | Subcatchment ID | `subcatchment_id` | scalar | |
-| Land uses | `coverages` | blob | Sub-fields: `.land_use`, `.area` |
-| Initial buildup | `loadings` | blob | Sub-fields: `.pollutant`, `.build_up` |
-| Soils | `soil` | blob | Sub-fields: `.soil`, `.area` |
+| Land uses | `coverages` | blob | Sub-fields: `coverages.land_use`, `coverages.area` |
+| Initial buildup | `loadings` | blob | Sub-fields: `loadings.pollutant`, `loadings.build_up` |
+| Soils | `soil` | blob | Sub-fields: `soil.soil`, `soil.area` |
 | Rain gage ID | `raingauge_id` | scalar | Linked rain gage |
 | Drains to | `sw_drains_to` | scalar | 'sw_node', 'sw_subcatchment' |
 | Outlet | `outlet_id` | scalar | |
@@ -470,7 +470,7 @@ Unless stated otherwise for a specific object, every `sw_*` network object in th
 | Time of concentration | `time_of_concentration` | scalar |  |
 | Snow pack ID | `snow_pack_id` | scalar | Linked snow pack |
 | Curb length | `curb_length` | scalar | Gutter/curb length for inlet capture |
-| LID controls | `suds_controls` | blob | Nested placement rows on subcatchment; sub-fields `suds_controls.*` (catalog fields are `sw_suds_control` below) |
+| LID controls | `suds_controls` | blob | Placement rows on subcatchment; Sub-fields: `suds_controls.suds_structure`, `suds_controls.id`, `suds_controls.area`, `suds_controls.num_units`, `suds_controls.impervious_area_treated_pct`, `suds_controls.pervious_area_treated_pct`, `suds_controls.outflow_to`, `suds_controls.surface` (control definition fields are `sw_suds_control` below) |
 | Pervious surface roughness pattern | `n_perv_pattern` | scalar | Time-varying roughness |
 | Depression storage pattern | `dstore_pattern` | scalar |  |
 | Infiltration capacity pattern | `infil_pattern` | scalar |  |
