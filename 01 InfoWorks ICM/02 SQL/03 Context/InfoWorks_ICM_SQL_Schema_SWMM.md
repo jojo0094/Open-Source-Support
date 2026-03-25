@@ -1,6 +1,6 @@
 # InfoWorks ICM SQL Schema — SWMM Networks
 
-**Last Updated:** March 20, 2026
+**Last Updated:** March 24, 2026
 
 **Load Priority:** LOOKUP — Load for any SWMM network SQL query requiring field names
 **Load Condition:** CONDITIONAL — When user asks about SWMM fields, schemas, or object inventory
@@ -19,7 +19,7 @@ Use it when:
 - The query involves field names from `sw_*` tables
 - An object manifest or coverage check is needed for SWMM objects
 
-⚠️ **InfoWorks fields are in `InfoWorks_ICM_SQL_Schema_InfoWorks.md`. Do not mix field sets.**
+**InfoWorks fields are in `InfoWorks_ICM_SQL_Schema_InfoWorks.md`. Do not mix field sets.**
 
 Key distinction: SWMM uses `length` for conduit length while InfoWorks uses `conduit_length`. Conduit dimensions (`conduit_width`/`conduit_height`) are the same in both networks.
 
@@ -32,13 +32,16 @@ Key distinction: SWMM uses `length` for conduit length while InfoWorks uses `con
 5. If a field is not listed here, check `InfoWorks_ICM_SQL_Schema_Common.md` for common/results fields.
 6. Do not invent field names.
 
-## Coverage Legend
+## Critical SQL Reminders
 
-| Status | Meaning |
-|--------|---------|
-| `verified` | Field rows verified from Autodesk Help documentation |
-| `repo-extracted` | Field rows extracted from repository parameter inventories or working examples |
-| `manifest-only` | Object officially listed but field table not yet transcribed |
+InfoWorks ICM SQL is **not standard ANSI SQL**. Even if `Lessons_Learned.md` was not loaded, these rules are mandatory:
+
+- **No CASE WHEN** — use `IIF(condition, true_val, false_val)` or `IF condition; ... ELSEIF ...; ELSE; ... ENDIF;`
+- **No JOINs** — use dot-notation navigation (e.g., `us_node.ground_level`, `ds_links.width`)
+- **Semicolons required** after every statement, including control flow (`IF;`, `ELSE;`, `ENDIF;`, `WEND;`)
+- **LIKE uses `?` and `*`** — not `%` and `_` (e.g., `LIKE 'MH*'` not `LIKE 'MH%'`)
+
+For full anti-pattern coverage, load `InfoWorks_ICM_SQL_Lessons_Learned.md`.
 
 ---
 
@@ -48,73 +51,73 @@ Source: Autodesk Help `Network Data Fields` index page.
 
 ### Nodes Grid
 
-| Object | Data Fields Topic | Internal Table | Status |
-|--------|-------------------|----------------|--------|
-| Node | Node Data Fields (SWMM) | `sw_node` | `verified` |
-| Unit hydrograph group | Unit Hydrograph Group Data Fields (SWMM) | `sw_unit_hydrograph_group` | `repo-extracted` |
-| Unit hydrograph | Unit Hydrograph Data Fields (SWMM) | `sw_unit_hydrograph` | `repo-extracted` |
-| Storage curve | Storage Curve Data Fields (SWMM) | `sw_storage_curve` | `repo-extracted` |
-| Tidal curve | Tidal Curve Data Fields (SWMM) | `sw_tidal_curve` | `repo-extracted` |
+| Object | Data Fields Topic | Internal Table |
+|--------|-------------------|----------------|
+| Node | Node Data Fields (SWMM) | `sw_node` |
+| Unit hydrograph group | Unit Hydrograph Group Data Fields (SWMM) | `sw_unit_hydrograph_group` |
+| Unit hydrograph | Unit Hydrograph Data Fields (SWMM) | `sw_unit_hydrograph` |
+| Storage curve | Storage Curve Data Fields (SWMM) | `sw_storage_curve` |
+| Tidal curve | Tidal Curve Data Fields (SWMM) | `sw_tidal_curve` |
 
 ### Links Grid
 
-| Object | Data Fields Topic | Internal Table | Status |
-|--------|-------------------|----------------|--------|
-| Conduit | Conduit Data Fields (SWMM) | `sw_conduit` | `verified` |
-| Control curve | Control Curve Data Fields (SWMM) | `sw_control_curve` | `repo-extracted` |
-| Shape curve | Shape Curve Data Fields (SWMM) | `sw_shape_curve` | `repo-extracted` |
-| Orifice | Orifice Curve Data Fields | `sw_orifice` | `repo-extracted` |
-| Outlet | Outlet Curve Data Fields | `sw_outlet` | `repo-extracted` |
-| Pump | Pump Data Fields (SWMM) | `sw_pump` | `repo-extracted` |
-| Pump curve | Pump Curve Data Fields (SWMM) | `sw_pump_curve` | `repo-extracted` |
-| Rating curve | Rating Curve Data Fields (SWMM) | `sw_rating_curve` | `repo-extracted` |
-| Transect | Transect Data Fields (SWMM) | `sw_transect` | `repo-extracted` |
-| Weir | Weir Data Fields (SWMM) | `sw_weir` | `repo-extracted` |
-| Weir curve | Weir Curve Data Fields (SWMM) | `sw_curve_weir` | `repo-extracted` |
+| Object | Data Fields Topic | Internal Table |
+|--------|-------------------|----------------|
+| Conduit | Conduit Data Fields (SWMM) | `sw_conduit` |
+| Control curve | Control Curve Data Fields (SWMM) | `sw_control_curve` |
+| Shape curve | Shape Curve Data Fields (SWMM) | `sw_shape_curve` |
+| Orifice | Orifice Curve Data Fields | `sw_orifice` |
+| Outlet | Outlet Curve Data Fields | `sw_outlet` |
+| Pump | Pump Data Fields (SWMM) | `sw_pump` |
+| Pump curve | Pump Curve Data Fields (SWMM) | `sw_pump_curve` |
+| Rating curve | Rating Curve Data Fields (SWMM) | `sw_rating_curve` |
+| Transect | Transect Data Fields (SWMM) | `sw_transect` |
+| Weir | Weir Data Fields (SWMM) | `sw_weir` |
+| Weir curve | Weir Curve Data Fields (SWMM) | `sw_curve_weir` |
 
 ### Subcatchments Grid
 
-| Object | Data Fields Topic | Internal Table | Status |
-|--------|-------------------|----------------|--------|
-| Subcatchment | Subcatchment Data Fields (SWMM) | `sw_subcatchment` | `verified` |
-| Land use | Land Use Data Field (SWMM) | `sw_land_use` | `repo-extracted` |
-| Pollutant | Pollutant Data Fields (SWMM) | `sw_pollutant` | `repo-extracted` |
-| Snow pack | Snow Pack Data Fields (SWMM) | `sw_snow_pack` | `repo-extracted` |
-| LID control | LID Controls Data Fields (SWMM) | `sw_suds_control` | `verified` |
-| Underdrain curve | Underdrain Curve Data Fields (SWMM) | `sw_curve_underdrain` | `repo-extracted` |
-| Aquifer | Aquifer Data Fields (SWMM) | `sw_aquifer` | `repo-extracted` |
-| Soil | Soil Data Fields (SWMM) | `sw_soil` | `repo-extracted` |
+| Object | Data Fields Topic | Internal Table |
+|--------|-------------------|----------------|
+| Subcatchment | Subcatchment Data Fields (SWMM) | `sw_subcatchment` |
+| Land use | Land Use Data Field (SWMM) | `sw_land_use` |
+| Pollutant | Pollutant Data Fields (SWMM) | `sw_pollutant` |
+| Snow pack | Snow Pack Data Fields (SWMM) | `sw_snow_pack` |
+| LID control | LID Controls Data Fields (SWMM) | `sw_suds_control` |
+| Underdrain curve | Underdrain Curve Data Fields (SWMM) | `sw_curve_underdrain` |
+| Aquifer | Aquifer Data Fields (SWMM) | `sw_aquifer` |
+| Soil | Soil Data Fields (SWMM) | `sw_soil` |
 
 ### Polygons Grid
 
-| Object | Data Fields Topic | Internal Table | Status |
-|--------|-------------------|----------------|--------|
-| Polygon | Polygon Data Fields (SWMM) | `sw_polygon` | `repo-extracted` |
-| TVD connector | TVD Connector Data Fields (SWMM) | `sw_tvd_connector` | `repo-extracted` |
-| Spatial rain zone | Spatial Rain Zone Data Fields (SWMM) | `sw_spatial_rain_zone` | `repo-extracted` |
-| Spatial rain source | Spatial Rain Source Data Fields (SWMM) | `sw_spatial_rain_source` | `repo-extracted` |
-| 2D zone | 2D Zone Data Fields (SWMM) | `sw_2d_zone` | `repo-extracted` |
-| Roughness zone | Roughness Zone Data Fields (SWMM) | `sw_roughness_zone` | `repo-extracted` |
-| Roughness definitions | Roughness Definition Data Fields (SWMM) | `sw_roughness_definition` | `repo-extracted` |
-| Mesh zone | Mesh Zone Data Fields (SWMM) | `sw_mesh_zone` | `repo-extracted` |
-| Mesh level zone | Mesh Level Zone Data Fields (SWMM) | `sw_mesh_level_zone` | `repo-extracted` |
-| Porous polygon | Porous Polygon Data Fields (SWMM) | `sw_porous_polygon` | `repo-extracted` |
-| IC zone - hydraulics (2D) | IC Zone - hydraulics (2D) Data Fields (SWMM) | `sw_2d_ic_polygon` | `repo-extracted` |
+| Object | Data Fields Topic | Internal Table |
+|--------|-------------------|----------------|
+| Polygon | Polygon Data Fields (SWMM) | `sw_polygon` |
+| TVD connector | TVD Connector Data Fields (SWMM) | `sw_tvd_connector` |
+| Spatial rain zone | Spatial Rain Zone Data Fields (SWMM) | `sw_spatial_rain_zone` |
+| Spatial rain source | Spatial Rain Source Data Fields (SWMM) | `sw_spatial_rain_source` |
+| 2D zone | 2D Zone Data Fields (SWMM) | `sw_2d_zone` |
+| Roughness zone | Roughness Zone Data Fields (SWMM) | `sw_roughness_zone` |
+| Roughness definitions | Roughness Definition Data Fields (SWMM) | `sw_roughness_definition` |
+| Mesh zone | Mesh Zone Data Fields (SWMM) | `sw_mesh_zone` |
+| Mesh level zone | Mesh Level Zone Data Fields (SWMM) | `sw_mesh_level_zone` |
+| Porous polygon | Porous Polygon Data Fields (SWMM) | `sw_porous_polygon` |
+| IC zone - hydraulics (2D) | IC Zone - hydraulics (2D) Data Fields (SWMM) | `sw_2d_ic_polygon` |
 
 ### Lines Grid
 
-| Object | Data Fields Topic | Internal Table | Status |
-|--------|-------------------|----------------|--------|
-| General line | General Line Data Fields (SWMM) | `sw_general_line` | `repo-extracted` |
-| Porous wall | Porous Wall Data Fields (SWMM) | `sw_porous_wall` | `repo-extracted` |
-| 2D boundary | 2D Boundary Line Data Fields (SWMM) | `sw_2d_boundary_line` | `repo-extracted` |
-| Head unit flow | Head Unit Flow Data Fields (SWMM) | `sw_head_unit_discharge` | `repo-extracted` |
+| Object | Data Fields Topic | Internal Table |
+|--------|-------------------|----------------|
+| General line | General Line Data Fields (SWMM) | `sw_general_line` |
+| Porous wall | Porous Wall Data Fields (SWMM) | `sw_porous_wall` |
+| 2D boundary | 2D Boundary Line Data Fields (SWMM) | `sw_2d_boundary_line` |
+| Head unit flow | Head Unit Flow Data Fields (SWMM) | `sw_head_unit_discharge` |
 
 ### Points Grid
 
-| Object | Data Fields Topic | Internal Table | Status |
-|--------|-------------------|----------------|--------|
-| Rain gage | Rain Gage Data Fields (SWMM) | `sw_raingage` | `repo-extracted` |
+| Object | Data Fields Topic | Internal Table |
+|--------|-------------------|----------------|
+| Rain gage | Rain Gage Data Fields (SWMM) | `sw_raingage` |
 
 ---
 
@@ -126,54 +129,50 @@ All SWMM field tables are indexed here. For common fields (`user_text_*`, `user_
 
 #### Node (`sw_node`)
 
-> **Provenance:** Elevations/depths/SWMM-common fields from Autodesk Help (verified). All other fields repo-extracted from `sw_parameters.rb`. `_flag` variants exist for most scalar fields.
-
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
 | Node ID | `node_id` | scalar | |
 | Node Type | `node_type` | scalar | 'JUNCTION', 'OUTFALL', 'DIVIDER', 'STORAGE' |
 | X Coordinate | `x` | scalar | |
 | Y Coordinate | `y` | scalar | |
-| Route Subcatchment | `route_subcatchment` | scalar | repo-extracted |
-| Unit Hydrograph ID | `unit_hydrograph_id` | scalar | repo-extracted; linked UH group |
-| Unit Hydrograph Area | `unit_hydrograph_area` | scalar | repo-extracted |
+| Route Subcatchment | `route_subcatchment` | scalar | |
+| Unit Hydrograph ID | `unit_hydrograph_id` | scalar | linked UH group |
+| Unit Hydrograph Area | `unit_hydrograph_area` | scalar | |
 | Ground Level | `ground_level` | scalar | |
-| Invert Elevation | `invert_elevation` | scalar | repo-extracted; SWMM node invert |
+| Invert Elevation | `invert_elevation` | scalar | SWMM node invert |
 | Maximum Depth | `maximum_depth` | scalar | SWMM node depth; InfoWorks uses `chamber_floor_level` |
 | Surcharge Depth | `surcharge_depth` | scalar | SWMM surcharge depth |
 | Initial Depth | `initial_depth` | scalar | SWMM initial condition |
-| Ponded Area | `ponded_area` | scalar | repo-extracted; surface flooding ponded area |
-| Flood Type | `flood_type` | scalar | repo-extracted |
-| Flooding Discharge Coefficient | `flooding_discharge_coeff` | scalar | repo-extracted |
-| Evaporation Factor | `evaporation_factor` | scalar | repo-extracted |
-| Initial Moisture Deficit | `initial_moisture_deficit` | scalar | repo-extracted; Green-Ampt infiltration |
-| Suction Head | `suction_head` | scalar | repo-extracted; Green-Ampt infiltration |
-| Conductivity | `conductivity` | scalar | repo-extracted; Green-Ampt saturated hydraulic conductivity |
-| Outfall Type | `outfall_type` | scalar | repo-extracted; 'FREE', 'NORMAL', 'FIXED', 'TIDAL', 'TIMESERIES' |
-| Flap Gate | `flap_gate` | scalar | repo-extracted; outfall flap gate |
-| Tidal Curve ID | `tidal_curve_id` | scalar | repo-extracted; outfall using sw_tidal_curve |
-| Fixed Stage | `fixed_stage` | scalar | repo-extracted; outfall fixed stage level |
-| Storage Type | `storage_type` | scalar | repo-extracted; 'TABULAR', 'FUNCTIONAL' |
-| Storage Curve | `storage_curve` | scalar | repo-extracted; links to sw_storage_curve |
-| Functional Coefficient | `functional_coefficient` | scalar | repo-extracted; A×H^B + C |
-| Functional Constant | `functional_constant` | scalar | repo-extracted |
-| Functional Exponent | `functional_exponent` | scalar | repo-extracted |
-| Inflow Baseline | `inflow_baseline` | scalar | repo-extracted; DWF baseline inflow |
-| Inflow Scaling | `inflow_scaling` | scalar | repo-extracted; DWF scaling factor |
-| Inflow Pattern | `inflow_pattern` | scalar | repo-extracted; DWF pattern ID |
-| Base Flow | `base_flow` | scalar | repo-extracted |
-| Base Flow Pattern 1 | `bf_pattern_1` | scalar | repo-extracted |
-| Base Flow Pattern 2 | `bf_pattern_2` | scalar | repo-extracted |
-| Base Flow Pattern 3 | `bf_pattern_3` | scalar | repo-extracted |
-| Base Flow Pattern 4 | `bf_pattern_4` | scalar | repo-extracted |
+| Ponded Area | `ponded_area` | scalar | surface flooding ponded area |
+| Flood Type | `flood_type` | scalar | |
+| Flooding Discharge Coefficient | `flooding_discharge_coeff` | scalar | |
+| Evaporation Factor | `evaporation_factor` | scalar | |
+| Initial Moisture Deficit | `initial_moisture_deficit` | scalar | Green-Ampt infiltration |
+| Suction Head | `suction_head` | scalar | Green-Ampt infiltration |
+| Conductivity | `conductivity` | scalar | Green-Ampt saturated hydraulic conductivity |
+| Outfall Type | `outfall_type` | scalar | 'FREE', 'NORMAL', 'FIXED', 'TIDAL', 'TIMESERIES' |
+| Flap Gate | `flap_gate` | scalar | outfall flap gate |
+| Tidal Curve ID | `tidal_curve_id` | scalar | outfall using sw_tidal_curve |
+| Fixed Stage | `fixed_stage` | scalar | outfall fixed stage level |
+| Storage Type | `storage_type` | scalar | 'TABULAR', 'FUNCTIONAL' |
+| Storage Curve | `storage_curve` | scalar | links to sw_storage_curve |
+| Functional Coefficient | `functional_coefficient` | scalar | A×H^B + C |
+| Functional Constant | `functional_constant` | scalar |  |
+| Functional Exponent | `functional_exponent` | scalar |  |
+| Inflow Baseline | `inflow_baseline` | scalar | DWF baseline inflow |
+| Inflow Scaling | `inflow_scaling` | scalar | DWF scaling factor |
+| Inflow Pattern | `inflow_pattern` | scalar | DWF pattern ID |
+| Base Flow | `base_flow` | scalar |  |
+| Base Flow Pattern 1 | `bf_pattern_1` | scalar |  |
+| Base Flow Pattern 2 | `bf_pattern_2` | scalar |  |
+| Base Flow Pattern 3 | `bf_pattern_3` | scalar |  |
+| Base Flow Pattern 4 | `bf_pattern_4` | scalar |  |
 | Treatment | `treatment` | blob | Sub-fields: `treatment.pollutant`, `treatment.result`, `treatment.function` |
 | Pollutant Inflows | `pollutant_inflows` | blob | Sub-fields: `pollutant_inflows.pollutant` |
 | Additional DWF | `additional_dwf` | blob | Sub-fields: `.baseline`, `.bf_pattern_1`–`4` |
 | Pollutant DWF | `pollutant_dwf` | blob | Sub-fields: `pollutant_dwf.pollutant` |
-| Notes | `notes` | scalar | Common data field |
-| Hyperlinks | `hyperlinks` | blob | Sub-fields: `hyperlinks.description`, `hyperlinks.url` |
-| User Number 1–10 | `user_number_1` to `user_number_10` | scalar | Common data fields |
-| User Text 1–10 | `user_text_1` to `user_text_10` | scalar | Common data fields |
+
+> Common data fields (`user_text_1`–`10`, `user_number_1`–`10`, `notes`, `hyperlinks`) apply to this object — see `Schema_Common.md`.
 
 #### Unit Hydrograph Group (`sw_unit_hydrograph_group`)
 
@@ -240,8 +239,6 @@ All SWMM field tables are indexed here. For common fields (`user_text_*`, `user_
 
 #### Conduit (`sw_conduit`)
 
-> **Provenance:** Core fields verified from Autodesk Help and confirmed by SWMM SQL scripts in repository. Other fields repo-extracted from `sw_parameters.rb`. `_flag` variants exist for most scalar fields.
->
 > ⚠️ **CORRECTION:** Previous schema incorrectly listed `geom1`/`geom2`/`barrels`/`xsec_type` as SWMM conduit fields. SWMM SQL scripts in this repository confirm `conduit_width`, `conduit_height`, `number_of_barrels`, and `shape` are the correct SQL field names.
 
 | UI Label | Database Field | Type | Notes |
@@ -253,39 +250,37 @@ All SWMM field tables are indexed here. For common fields (`user_text_*`, `user_
 | Shape | `shape` | scalar | SWMM cross-section shape code |
 | Width / Diameter | `conduit_width` | scalar | Confirmed in SWMM SQL scripts; NOT `geom1` |
 | Height | `conduit_height` | scalar | Confirmed in SWMM SQL scripts; NOT `geom2` |
-| Number of Barrels | `number_of_barrels` | scalar | repo-extracted; NOT `barrels` |
+| Number of Barrels | `number_of_barrels` | scalar | NOT `barrels` |
 | Upstream Invert | `us_invert` | scalar | |
 | Downstream Invert | `ds_invert` | scalar | |
 | Manning's N | `Mannings_N` | scalar | Note case: capital M and N; confirmed from SWMM SQL scripts |
-| Bottom Manning's N | `bottom_mannings_N` | scalar | repo-extracted; composite roughness |
-| Roughness Depth Threshold | `roughness_depth_threshold` | scalar | repo-extracted |
-| Darcy-Weisbach Roughness | `roughness_DW` | scalar | repo-extracted |
-| Hazen-Williams Roughness | `roughness_HW` | scalar | repo-extracted |
+| Bottom Manning's N | `bottom_mannings_N` | scalar | composite roughness |
+| Roughness Depth Threshold | `roughness_depth_threshold` | scalar |  |
+| Darcy-Weisbach Roughness | `roughness_DW` | scalar |  |
+| Hazen-Williams Roughness | `roughness_HW` | scalar |  |
 | US Headloss Coefficient | `us_headloss_coeff` | scalar | |
 | DS Headloss Coefficient | `ds_headloss_coeff` | scalar | |
-| Average Headloss Coefficient | `av_headloss_coeff` | scalar | repo-extracted |
-| Initial Flow | `initial_flow` | scalar | repo-extracted; initial condition |
-| Max Flow | `max_flow` | scalar | repo-extracted; flow limit |
-| Sediment Depth | `sediment_depth` | scalar | repo-extracted |
-| Seepage Rate | `seepage_rate` | scalar | repo-extracted |
-| Culvert Code | `culvert_code` | scalar | repo-extracted |
-| Flap Gate | `flap_gate` | scalar | repo-extracted |
-| Branch ID | `branch_id` | scalar | repo-extracted |
-| Transect | `transect` | scalar | repo-extracted; for IRREGULAR shape |
-| Top Radius | `top_radius` | scalar | repo-extracted; for ARCH shapes |
-| Left Slope | `left_slope` | scalar | repo-extracted; for TRAPEZOIDAL shape |
-| Right Slope | `right_slope` | scalar | repo-extracted; for TRAPEZOIDAL shape |
-| Triangle Height | `triangle_height` | scalar | repo-extracted; for TRIANGULAR shape |
-| Bottom Radius | `bottom_radius` | scalar | repo-extracted |
-| Shape Curve | `shape_curve` | scalar | repo-extracted; custom shape curve ID |
-| Shape Exponent | `shape_exponent` | scalar | repo-extracted |
-| Horizontal Ellipse Size | `horiz_ellipse_size_code` | scalar | repo-extracted; EPA SWMM standard size code |
-| Vertical Ellipse Size | `vert_ellipse_size_code` | scalar | repo-extracted |
-| Arch Material | `arch_material` | scalar | repo-extracted; for ARCH shapes |
-| Notes | `notes` | scalar | Common data field |
-| Hyperlinks | `hyperlinks` | blob | Sub-fields: `hyperlinks.description`, `hyperlinks.url` |
-| User Number 1–10 | `user_number_1` to `user_number_10` | scalar | Common data fields |
-| User Text 1–10 | `user_text_1` to `user_text_10` | scalar | Common data fields |
+| Average Headloss Coefficient | `av_headloss_coeff` | scalar |  |
+| Initial Flow | `initial_flow` | scalar | initial condition |
+| Max Flow | `max_flow` | scalar | flow limit |
+| Sediment Depth | `sediment_depth` | scalar |  |
+| Seepage Rate | `seepage_rate` | scalar |  |
+| Culvert Code | `culvert_code` | scalar |  |
+| Flap Gate | `flap_gate` | scalar |  |
+| Branch ID | `branch_id` | scalar |  |
+| Transect | `transect` | scalar | for IRREGULAR shape |
+| Top Radius | `top_radius` | scalar | for ARCH shapes |
+| Left Slope | `left_slope` | scalar | for TRAPEZOIDAL shape |
+| Right Slope | `right_slope` | scalar | for TRAPEZOIDAL shape |
+| Triangle Height | `triangle_height` | scalar | for TRIANGULAR shape |
+| Bottom Radius | `bottom_radius` | scalar |  |
+| Shape Curve | `shape_curve` | scalar | custom shape curve ID |
+| Shape Exponent | `shape_exponent` | scalar |  |
+| Horizontal Ellipse Size | `horiz_ellipse_size_code` | scalar | EPA SWMM standard size code |
+| Vertical Ellipse Size | `vert_ellipse_size_code` | scalar |  |
+| Arch Material | `arch_material` | scalar | for ARCH shapes |
+
+> Common data fields (`user_text_1`–`10`, `user_number_1`–`10`, `notes`, `hyperlinks`) apply to this object — see `Schema_Common.md`.
 
 #### Pump (`sw_pump`)
 
@@ -426,8 +421,6 @@ All SWMM field tables are indexed here. For common fields (`user_text_*`, `user_
 
 #### Subcatchment (`sw_subcatchment`)
 
-> **Provenance:** Core area/topology fields verified. All other fields repo-extracted from `sw_parameters.rb` and confirmed from SWMM SQL scripts in repository. `_flag` variants exist for most scalar fields.
-
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
 | Subcatchment ID | `subcatchment_id` | scalar | |
@@ -436,8 +429,8 @@ All SWMM field tables are indexed here. For common fields (`user_text_*`, `user_
 | Rain Gage ID | `raingauge_id` | scalar | Linked rain gage |
 | Area | `area` | scalar | SWMM area; InfoWorks uses `contributing_area` |
 | Width | `width` | scalar | Characteristic width |
-| Hydraulic Length | `hydraulic_length` | scalar | repo-extracted |
-| Catchment Slope | `catchment_slope` | scalar | repo-extracted |
+| Hydraulic Length | `hydraulic_length` | scalar |  |
+| Catchment Slope | `catchment_slope` | scalar |  |
 | Percent Impervious | `percent_impervious` | scalar | **CORRECTED** from `percent_imperv`; confirmed in SWMM SQL scripts |
 | Roughness Impervious | `roughness_impervious` | scalar | Manning's N for impervious surface |
 | Roughness Pervious | `roughness_pervious` | scalar | Manning's N for pervious surface |
@@ -450,18 +443,18 @@ All SWMM field tables are indexed here. For common fields (`user_text_*`, `user_
 | Initial Infiltration | `initial_infiltration` | scalar | Horton/GA initial rate |
 | Limiting Infiltration | `limiting_infiltration` | scalar | Horton/GA limiting rate |
 | Decay Factor | `decay_factor` | scalar | Horton decay constant |
-| Initial Abstraction Factor | `initial_abstraction_factor` | scalar | repo-extracted |
+| Initial Abstraction Factor | `initial_abstraction_factor` | scalar |  |
 | Drying Time | `drying_time` | scalar | Horton drying time |
 | Max Infiltration Volume | `max_infiltration_volume` | scalar | Volume limit for Horton method |
 | Initial Moisture Deficit | `initial_moisture_deficit` | scalar | Green-Ampt initial moisture deficit |
 | Average Capillary Suction | `average_capillary_suction` | scalar | Green-Ampt suction head |
 | Saturated Hydraulic Conductivity | `saturated_hydraulic_conductivity` | scalar | Green-Ampt saturated K |
 | Curve Number | `curve_number` | scalar | CN method curve number |
-| Initial Abstraction | `initial_abstraction` | scalar | repo-extracted |
-| Initial Abstraction Type | `initial_abstraction_type` | scalar | repo-extracted |
+| Initial Abstraction | `initial_abstraction` | scalar |  |
+| Initial Abstraction Type | `initial_abstraction_type` | scalar |  |
 | Runoff Model Type | `runoff_model_type` | scalar | Runoff model selector |
-| Shape Factor | `shape_factor` | scalar | repo-extracted |
-| Time of Concentration | `time_of_concentration` | scalar | repo-extracted |
+| Shape Factor | `shape_factor` | scalar |  |
+| Time of Concentration | `time_of_concentration` | scalar |  |
 | Snow Pack ID | `snow_pack_id` | scalar | Linked snow pack |
 | Curb Length | `curb_length` | scalar | Gutter/curb length for inlet capture |
 | Aquifer ID | `aquifer_id` | scalar | Linked aquifer |
@@ -469,29 +462,27 @@ All SWMM field tables are indexed here. For common fields (`user_text_*`, `user_
 | Aquifer Elevation | `aquifer_elevation` | scalar | Aquifer/GW reference elevation |
 | Aquifer Initial Groundwater | `aquifer_initial_groundwater` | scalar | Initial GW level |
 | Aquifer Initial Moisture | `aquifer_initial_moisture_content` | scalar | Initial unsaturated zone moisture |
-| Elevation | `elevation` | scalar | repo-extracted; surface elevation |
+| Elevation | `elevation` | scalar | surface elevation |
 | Groundwater Coefficient | `groundwater_coefficient` | scalar | Lateral GW flow coefficient |
 | Groundwater Exponent | `groundwater_exponent` | scalar | Lateral GW flow exponent |
 | Groundwater Threshold | `groundwater_threshold` | scalar | GW flow threshold depth |
-| Lateral GWF Equation | `lateral_gwf_equation` | scalar | repo-extracted |
-| Deep GWF Equation | `deep_gwf_equation` | scalar | repo-extracted |
+| Lateral GWF Equation | `lateral_gwf_equation` | scalar |  |
+| Deep GWF Equation | `deep_gwf_equation` | scalar |  |
 | Surface Coefficient | `surface_coefficient` | scalar | Surface GW flow coefficient |
-| Surface Depth | `surface_depth` | scalar | repo-extracted |
-| Surface Exponent | `surface_exponent` | scalar | repo-extracted |
-| Surface GW Coefficient | `surface_groundwater_coefficient` | scalar | repo-extracted |
-| Area Average Rain | `area_average_rain` | scalar | repo-extracted |
-| X Coordinate | `x` | scalar | repo-extracted |
-| Y Coordinate | `y` | scalar | repo-extracted (note: capital X in results scripts, lowercase y) |
-| N Perv Pattern | `n_perv_pattern` | scalar | repo-extracted; time-varying roughness |
-| D-Store Pattern | `dstore_pattern` | scalar | repo-extracted |
-| Infiltration Pattern | `infil_pattern` | scalar | repo-extracted |
+| Surface Depth | `surface_depth` | scalar |  |
+| Surface Exponent | `surface_exponent` | scalar |  |
+| Surface GW Coefficient | `surface_groundwater_coefficient` | scalar |  |
+| Area Average Rain | `area_average_rain` | scalar |  |
+| X Coordinate | `x` | scalar |  |
+| Y Coordinate | `y` | scalar |  (note: capital X in results scripts, lowercase y) |
+| N Perv Pattern | `n_perv_pattern` | scalar | time-varying roughness |
+| D-Store Pattern | `dstore_pattern` | scalar |  |
+| Infiltration Pattern | `infil_pattern` | scalar |  |
 | Coverages | `coverages` | blob | Sub-fields: `.land_use`, `.area` |
 | Loadings | `loadings` | blob | Sub-fields: `.pollutant`, `.build_up` |
 | Soil | `soil` | blob | Sub-fields: `.soil`, `.area` |
-| Notes | `notes` | scalar | Common data field |
-| Hyperlinks | `hyperlinks` | blob | Sub-fields: `hyperlinks.description`, `hyperlinks.url` |
-| User Number 1–10 | `user_number_1` to `user_number_10` | scalar | Common data fields |
-| User Text 1–10 | `user_text_1` to `user_text_10` | scalar | Common data fields |
+
+> Common data fields (`user_text_1`–`10`, `user_number_1`–`10`, `notes`, `hyperlinks`) apply to this object — see `Schema_Common.md`.
 
 #### Subcatchment LID / SuDS Controls (`sw_suds_control`)
 
@@ -697,7 +688,18 @@ All SWMM field tables are indexed here. For common fields (`user_text_*`, `user_
 
 ## Simulation Results
 
-Result fields use `tsr.ATTRIBUTE` syntax. See `InfoWorks_ICM_SQL_Schema_Common.md` for shared `sim.*` summary fields and `tsr.*` metadata.
+Result fields use `tsr.ATTRIBUTE` syntax. See `InfoWorks_ICM_SQL_Schema_Common.md` for `tsr.*` metadata fields.
+
+### Summary Results (`sim.*`)
+
+The `sim.*` prefix returns summary results at the current timestep or maximum. No aggregate function is needed.
+
+| UI / Meaning | Database Field | Type | Notes |
+|--------------|----------------|------|-------|
+| Maximum Depth | `sim.max_depth` | result | SWMM node/conduit result |
+| Maximum Flow | `sim.max_flow` | result | SWMM link result |
+
+**Do not assume a `sim.*` suffix from one network type will work in the other.** InfoWorks-specific `sim.*` fields are in `Schema_InfoWorks.md`.
 
 ### Node Results (`sw_node`, `sw_outfall`, `sw_storage_node`)
 
@@ -719,9 +721,9 @@ Result fields use `tsr.ATTRIBUTE` syntax. See `InfoWorks_ICM_SQL_Schema_Common.m
 
 | UI / Meaning | Database Field | Type | Notes |
 |--------------|----------------|------|-------|
-| Max water depth | `tsr.DEPTH` | result | Maxima |
-| Max hydraulic head | `tsr.HEAD` | result | Maxima |
-| Max total inflow | `tsr.TOTAL_INFLOW` | result | Maxima |
+| Max water depth | `tsr.MAX_DEPTH` | result | Maxima |
+| Max hydraulic head | `tsr.MAX_HEAD` | result | Maxima |
+| Max total inflow | `tsr.MAX_TOTAL_INFLOW` | result | Maxima |
 
 #### Hydraulic summary results (non time-varying)
 
@@ -778,15 +780,17 @@ Result fields use `tsr.ATTRIBUTE` syntax. See `InfoWorks_ICM_SQL_Schema_Common.m
 
 | UI / Meaning | Database Field | Type | Notes |
 |--------------|----------------|------|-------|
-| Max flow | `tsr.DEPTH` | result | Maxima; note: Help doc lists attribute as DEPTH |
-| Max capacity | `tsr.CAPACITY` | result | Maxima |
-| Max velocity | `tsr.VELOCITY` | result | Maxima |
+| Max flow | `tsr.MAX_FLOW` | result | Maxima |
+| Max depth | `tsr.MAX_DEPTH` | result | Maxima |
+| Max capacity | `tsr.MAX_CAPACITY` | result | Maxima |
+| Max velocity | `tsr.MAX_VELOCITY` | result | Maxima |
 
 #### Pump/orifice/weir/outlet hydraulic maxima results
 
 | UI / Meaning | Database Field | Type | Notes |
 |--------------|----------------|------|-------|
-| Max flow | `tsr.DEPTH` | result | Maxima; note: Help doc lists attribute as DEPTH |
+| Max flow | `tsr.MAX_FLOW` | result | Maxima |
+| Max depth | `tsr.MAX_DEPTH` | result | Maxima |
 
 #### Pump hydraulic summary results (non time-varying)
 
@@ -840,7 +844,7 @@ Result fields use `tsr.ATTRIBUTE` syntax. See `InfoWorks_ICM_SQL_Schema_Common.m
 | \<pollutant name\> | `tsr.<pollutant name>` | result | Time-varying; attribute is the pollutant name |
 | Max \<pollutant name\> | `tsr.<pollutant name>` | result | Maxima; attribute is the pollutant name |
 
-### Rain Gauge Results (`sw_rain_gage`)
+### Rain Gauge Results (`sw_raingage`)
 
 #### Time-varying results
 
@@ -880,6 +884,13 @@ Result fields use `tsr.ATTRIBUTE` syntax. See `InfoWorks_ICM_SQL_Schema_Common.m
 | Mesh element area | `tsr.AREA2D` | result | Summary |
 | Element level (ground level) | `tsr.GNDLEV2D` | result | Summary |
 | Max hazard | `tsr.HAZARD2D` | result | Summary; DEFRA HR = d×(v+0.5)+DF |
+| Max depth | `tsr.MAX_DEPTH2D` | result | Summary |
+| Max elevation | `tsr.MAX_ELEVATION2D` | result | Summary |
+| Max speed | `tsr.MAX_SPEED2D` | result | Summary |
+| Max unit flow | `tsr.MAXUNITFLOW2D` | result | Summary |
+| Min depth | `tsr.MINDEPTH2D` | result | Summary |
+| Min speed | `tsr.MINSPEED2D` | result | Summary |
+| Min unit flow | `tsr.MINUNITFLOW2D` | result | Summary |
 | Rainfall profile | `tsr.RAINPROF2D` | result | Summary |
 | Time to last inundation | `tsr.T_END_INUNDATION_2D` | result | Summary; -1 if threshold not met |
 | Total inundation duration | `tsr.T_FLOOD_DURATION_2D` | result | Summary; -1 if threshold not met |
@@ -989,7 +1000,7 @@ Result fields use `tsr.ATTRIBUTE` syntax. See `InfoWorks_ICM_SQL_Schema_Common.m
 | Max ground level | `tsr.MAXGNDLEV2D` | result | Summary |
 | Max area flooded to inundation depth | `tsr.MAXFLOODED_AREA2D` | result | Summary |
 | Min flow into polygon | `tsr.MINFLOW2D` | result | Summary |
-| Min lowest depth | `tsr.MINLOWDPETH2D` | result | Summary |
+| Min lowest depth | `tsr.MINLOWDEPTH2D` | result | Summary |
 | Min lowest elevation | `tsr.MINLOWELEVATION2D` | result | Summary |
 | Min lowest speed | `tsr.MINLOWSPEED2D` | result | Summary |
 | Min enclosed volume | `tsr.MINVOLUME2D` | result | Summary |

@@ -1,6 +1,6 @@
 ﻿# InfoWorks ICM SQL Schema — Common Fields, Results, and Workflow
 
-**Last Updated:** March 20, 2026
+**Last Updated:** March 25, 2026
 
 **Load Priority:** LOOKUP — Load alongside a network-type schema file for complete field coverage
 **Load Condition:** ALWAYS load with `Schema_InfoWorks.md` or `Schema_SWMM.md` for field lookups
@@ -30,10 +30,8 @@ Source: Autodesk Help `Common Data Fields`. These fields exist on **all** networ
 
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
-| User Number 1 | `user_number_1` | Double | Additional numeric field |
-| User Number 2–10 | `user_number_2` to `user_number_10` | Double | Additional numeric fields |
-| User Text 1 | `user_text_1` | Text | Additional string field |
-| User Text 2–10 | `user_text_2` to `user_text_10` | Text | Additional string fields |
+| User Number 1–10 | `user_number_1` to `user_number_10` | Double | Additional numeric fields |
+| User Text 1–10 | `user_text_1` to `user_text_10` | Text | Additional string fields |
 | Hyperlinks | `hyperlinks` | Array | External files or URLs attached to an object. SQL navigation syntax: `hyperlinks.field` |
 | Notes | `notes` | Memo | Freeform notes |
 
@@ -44,17 +42,6 @@ Source: Autodesk Help `Common Data Fields`. These fields exist on **all** networ
 
 ---
 
-## Coverage Legend
-
-| Status | Meaning |
-|--------|---------|
-| `verified` | Field rows verified from Autodesk Help documentation |
-| `repo-extracted` | Field rows extracted from repository parameter inventories or working examples |
-| `manifest-only` | Object officially listed but field table not yet transcribed |
-
-The InfoWorks object manifest is complete. The SWMM object manifest is complete with the exception of field tables for several `repo-extracted` polygon objects. No `manifest-only` entries remain.
-
----
 
 ## InfoWorks vs SWMM — Key Field Differences
 
@@ -71,6 +58,7 @@ This is the **primary source of hallucination errors**. Always verify network ty
 | Node table | `hw_node` | `sw_node` | |
 | Conduit table | `hw_conduit` | `sw_conduit` | |
 | Subcatchment table | `hw_subcatchment` | `sw_subcatchment` |
+| Conduit/Link identifier | `link_suffix` | `id` | Key difference — most common identifier field |
 
 **Rules:**
 - `hw_*` tables = InfoWorks network
@@ -121,23 +109,7 @@ Result fields are accessed through `sim.*` (summary results) and `tsr.*` (time-s
 
 The `sim.*` prefix syntax is common to both network types. However, the suffix names are **network-type specific** — InfoWorks and SWMM use different field codes for the same hydraulic concepts.
 
-**InfoWorks-specific `sim.*` examples:**
-
-| UI / Meaning | Database Field | Type | Notes |
-|--------------|----------------|------|-------|
-| Downstream Depth | `sim.ds_depth` | result | InfoWorks link result |
-| Downstream Flow | `sim.ds_flow` | result | InfoWorks link result |
-| Maximum Surcharge | `sim.max_Surcharge` | result | Case-sensitive as shown |
-| Peak Catchment Flow | `sim.max_qcatch` | result | InfoWorks subcatchment |
-
-**SWMM-specific `sim.*` examples:**
-
-| UI / Meaning | Database Field | Type | Notes |
-|--------------|----------------|------|-------|
-| Maximum Depth | `sim.max_depth` | result | SWMM node/conduit result |
-| Maximum Flow | `sim.max_flow` | result | SWMM link result |
-
-**Do not assume a `sim.*` suffix from one network type will work in the other.** Full `tsr.*` field listings are in the network-type schema files.
+**Do not assume a `sim.*` suffix from one network type will work in the other.** Object- and network-specific `sim.*` field names are listed in the network-type schema files (`Schema_InfoWorks.md` and `Schema_SWMM.md`) alongside `tsr.*` fields.
 
 ### Time Series Metadata (`tsr.*`)
 
@@ -160,9 +132,9 @@ Object-specific `tsr.*` result field names are listed by network type:
 ### Results Retrieval Notes
 
 - `sim.*` and `tsr.*` are exact prefixes — do not paraphrase them
-- `tsr.*` fields require aggregate functions when used in SQL (e.g., `MAX(tsr.DEPTH)`)
-- Attribute names are case-sensitive — preserve exact case from Autodesk Help documentation
-- `tsr.floodvolume` = InfoWorks node flood volume; `tsr.TOTAL_FLOOD_VOLUME` = SWMM equivalent
+- `tsr.*` fields require aggregate functions when used in SQL (e.g., `MAX(tsr.depth)` for SWMM, `MAX(tsr.depnod)` for InfoWorks)
+- **SQL is case-insensitive** for `tsr.*` attribute names — `tsr.depth` and `tsr.DEPTH` are equivalent
+- `tsr.floodvolume` = InfoWorks node flood volume; `tsr.total_flood_volume` = SWMM equivalent
 ### Second Simulation Prefixes
 
 | Prefix | Meaning | Notes |
@@ -183,23 +155,16 @@ These are valid SQL field paths created by InfoWorks navigation, not flat databa
 | Upstream Node Ground Level | `us_node.ground_level` | relationship | Link to upstream node |
 | Upstream Node ID | `us_node.node_id` | relationship | Link to upstream node |
 | Upstream Node OID | `us_node.oid` | relationship | Link to upstream node |
-| Upstream Node User Text 1 | `us_node.user_text_1` | relationship | Common navigation example |
-| Upstream Node User Text 2 | `us_node.user_text_2` | relationship | Common navigation example |
-| Upstream Node User Text 3 | `us_node.user_text_3` | relationship | Common navigation example |
-| Upstream Node User Text 9 | `us_node.user_text_9` | relationship | Extracted from repository |
+| Upstream Node User Text N | `us_node.user_text_1` … `user_text_10` | relationship | Any common field works after prefix |
 | Downstream Node Ground Level | `ds_node.ground_level` | relationship | Link to downstream node |
 | Downstream Node ID | `ds_node.node_id` | relationship | Link to downstream node |
 | Downstream Node OID | `ds_node.oid` | relationship | Link to downstream node |
-| Downstream Node User Number 5 | `ds_node.user_number_5` | relationship | Travel-time example |
-| Downstream Node User Text 1 | `ds_node.user_text_1` | relationship | Common navigation example |
-| Downstream Node User Text 3 | `ds_node.user_text_3` | relationship | Common navigation example |
-| Downstream Node User Text 8 | `ds_node.user_text_8` | relationship | Extracted from repository |
+| Downstream Node User Text/Number N | `ds_node.user_text_1` … `user_number_10` | relationship | Any common field works after prefix |
 | Downstream Node X | `ds_node.X` | relationship | Case preserved from repository |
 | Downstream Node y | `ds_node.y` | relationship | Case preserved from repository |
 | Subcatchment Node Ground Level | `node.ground_level` | relationship | Subcatchment to node |
 | Subcatchment Node ID | `node.node_id` | relationship | Subcatchment to node |
-| Subcatchment Node User Number 1 | `node.user_number_1` | relationship | Subcatchment to node |
-| Subcatchment Node User Number 5 | `node.user_number_5` | relationship | Subcatchment to node |
+| Subcatchment Node User Number/Text N | `node.user_number_1` … `user_text_10` | relationship | Any common field works after prefix |
 
 ### One-to-Many and Full-Trace Navigation
 
@@ -212,17 +177,15 @@ These are valid SQL field paths created by InfoWorks navigation, not flat databa
 | Downstream Links Crest | `ds_links.crest` | relationship | One-to-many link path |
 | Downstream Links Invert | `ds_links.invert` | relationship | One-to-many link path |
 | Downstream Links Upstream Invert | `ds_links.us_invert` | relationship | One-to-many link path |
-| Downstream Links User Number 10 | `ds_links.user_number_10` | relationship | Extracted from repository |
-| Downstream Links User Number 5 | `ds_links.user_number_5` | relationship | Extracted from repository |
-| All Upstream Links Length | `all_us_links.conduit_length` | relationship | Full network trace path |
+| Downstream Links User Number/Text N | `ds_links.user_number_1` … `user_text_10` | relationship | Any common field works after prefix |
+| All Upstream Links Length | `all_us_links.conduit_length` | relationship | Full network trace path; InfoWorks only — SWMM uses `all_us_links.length` |
 | All Upstream Links Upstream Node ID | `all_us_links.us_node_id` | relationship | Full network trace path |
 
 ### Spatial Relationship Paths
 
 | Meaning | Field Path | Type | Notes |
 |---------|------------|------|-------|
-| Spatial User Number 1 | `spatial.user_number_1` | relationship | Common spatial marker |
-| Spatial User Number 10 | `spatial.user_number_10` | relationship | Common spatial marker |
+| Spatial User Number/Text N | `spatial.user_number_1` … `user_text_10` | relationship | Any common field works after prefix |
 | Spatial Node ID | `spatial.node_id` | relationship | Spatially related node |
 | Spatial Identifier | `spatial.ident` | relationship | Extracted from GIS point example |
 | Spatial Value | `spatial.value` | relationship | Extracted from GIS point example |
@@ -306,7 +269,7 @@ These are valid SQL field paths created by InfoWorks navigation, not flat databa
 
 ### Expansion Priority
 
-1. Promote current `repo-extracted` InfoWorks and SWMM objects to Autodesk-transcribed coverage where official field tables can be harvested cleanly
+1. Promote remaining InfoWorks and SWMM objects to Autodesk-transcribed coverage where official field tables can be harvested cleanly
 2. Reconcile any remaining alias mismatches between Autodesk labels and repo-local internal table names
 3. River Reach full field set from Autodesk Help, plus additional nested/blob fields
 4. InfoAsset Manager survey and blob-table fields

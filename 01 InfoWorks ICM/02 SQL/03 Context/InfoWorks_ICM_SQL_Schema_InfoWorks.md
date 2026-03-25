@@ -19,7 +19,7 @@ Use it when:
 - The query involves field names from `hw_*` tables
 - An object manifest or coverage check is needed for InfoWorks objects
 
-⚠️ **SWMM fields are in `InfoWorks_ICM_SQL_Schema_SWMM.md`. Do not mix field sets.**
+**SWMM fields are in `InfoWorks_ICM_SQL_Schema_SWMM.md`. Do not mix field sets.**
 
 ## Retrieval Rules for LLMs
 
@@ -30,13 +30,16 @@ Use it when:
 5. If a field is not listed here, check `InfoWorks_ICM_SQL_Schema_Common.md` for common/results fields.
 6. Do not invent field names.
 
-## Coverage Legend
+## Critical SQL Reminders
 
-| Status | Meaning |
-|--------|---------|
-| `verified` | Field rows verified from Autodesk Help documentation |
-| `repo-extracted` | Field rows extracted from repository parameter inventories or working examples |
-| `manifest-only` | Object officially listed but field table not yet transcribed |
+InfoWorks ICM SQL is **not standard ANSI SQL**. Even if `Lessons_Learned.md` was not loaded, these rules are mandatory:
+
+- **No CASE WHEN** — use `IIF(condition, true_val, false_val)` or `IF condition; ... ELSEIF ...; ELSE; ... ENDIF;`
+- **No JOINs** — use dot-notation navigation (e.g., `us_node.ground_level`, `ds_links.width`)
+- **Semicolons required** after every statement, including control flow (`IF;`, `ELSE;`, `ENDIF;`, `WEND;`)
+- **LIKE uses `?` and `*`** — not `%` and `_` (e.g., `LIKE 'MH*'` not `LIKE 'MH%'`)
+
+For full anti-pattern coverage, load `InfoWorks_ICM_SQL_Lessons_Learned.md`.
 
 ---
 
@@ -46,113 +49,113 @@ Source: Autodesk Help `Network Data Fields` index page.
 
 ### Nodes Grid
 
-| Object | Data Fields Topic | Internal Table | Status |
-|--------|-------------------|----------------|--------|
-| Node | Node Data Fields (InfoWorks) | `hw_node` | `verified` |
+| Object | Data Fields Topic | Internal Table |
+|--------|-------------------|----------------|
+| Node | Node Data Fields (InfoWorks) | `hw_node` |
 
 ### Links Grid
 
-| Object | Data Fields Topic | Internal Table | Status |
-|--------|-------------------|----------------|--------|
-| Blockage | Blockage Data Fields | `hw_blockage` | `repo-extracted` |
-| Bridge Blockage | Bridge Blockage Data Fields | `hw_bridge_blockage` | `repo-extracted` |
-| Bridge | Bridge Data Fields | `hw_bridge` | `repo-extracted` |
-| Bridge inlet | Bridge Inlet Data Fields | `hw_bridge_inlet` | `repo-extracted` |
-| Bridge opening | Bridge Opening Data Fields | `hw_bridge_opening` | `repo-extracted` |
-| Bridge outlet | Bridge Outlet Data Fields | `hw_bridge_outlet` | `repo-extracted` |
-| Channel | Channel Data Fields | `hw_channel` | `repo-extracted` |
-| Channel shape | Channel Shape Data Fields | `hw_channel_shape` | `repo-extracted` |
-| Conduit | Conduit Data Fields (InfoWorks) | `hw_conduit` | `verified` |
-| Culvert inlet | Culvert Inlet Data Fields | `hw_culvert_inlet` | `repo-extracted` |
-| Culvert outlet | Culvert Outlet Data Fields | `hw_culvert_outlet` | `repo-extracted` |
-| Flap valve | Flap Valve Data Fields (InfoWorks) | `hw_flap_valve` | `repo-extracted` |
-| Flow efficiency | Flow Efficiency Table Data Fields | `hw_flow_efficiency` | `repo-extracted` |
-| Flume | Flume Data Fields | `hw_flume` | `repo-extracted` |
-| Head discharge | Head Discharge Tables | `hw_head_discharge` | `verified` |
-| Headloss curve | Headloss Curve Data Fields | `hw_headloss` | `repo-extracted` |
-| Inline bank | Inline Bank Data Fields | `hw_inline_bank` | `repo-extracted` |
-| Irregular weir | Irregular Weir Data Fields | `hw_irregular_weir` | `repo-extracted` |
-| Orifice | Orifice Data Fields (InfoWorks) | `hw_orifice` | `repo-extracted` |
-| Pump | Pump Data Fields (InfoWorks) | `hw_pump` | `repo-extracted` |
-| River Reach | River Reach Data Fields (InfoWorks) | `hw_river_reach` | `verified` |
-| Screen | Screen Data Fields | `hw_screen` | `repo-extracted` |
-| Sediment grading | Sediment Grading Data Fields | `hw_sediment_grading` | `repo-extracted` |
-| Shape | Shape Data Fields | `hw_shape` | `repo-extracted` |
-| Siphon | Siphon Data Fields | `hw_siphon` | `repo-extracted` |
-| Sluice | Sluice Data Fields | `hw_sluice` | `repo-extracted` |
-| User control | User-Defined Control Data Fields | `hw_user_control` | `repo-extracted` |
-| Weir | Weir Data Fields (InfoWorks) | `hw_weir` | `repo-extracted` |
+| Object | Data Fields Topic | Internal Table |
+|--------|-------------------|----------------|
+| Blockage | Blockage Data Fields | `hw_blockage` |
+| Bridge Blockage | Bridge Blockage Data Fields | `hw_bridge_blockage` |
+| Bridge | Bridge Data Fields | `hw_bridge` |
+| Bridge inlet | Bridge Inlet Data Fields | `hw_bridge_inlet` |
+| Bridge opening | Bridge Opening Data Fields | `hw_bridge_opening` |
+| Bridge outlet | Bridge Outlet Data Fields | `hw_bridge_outlet` |
+| Channel | Channel Data Fields | `hw_channel` |
+| Channel shape | Channel Shape Data Fields | `hw_channel_shape` |
+| Conduit | Conduit Data Fields (InfoWorks) | `hw_conduit` |
+| Culvert inlet | Culvert Inlet Data Fields | `hw_culvert_inlet` |
+| Culvert outlet | Culvert Outlet Data Fields | `hw_culvert_outlet` |
+| Flap valve | Flap Valve Data Fields (InfoWorks) | `hw_flap_valve` |
+| Flow efficiency | Flow Efficiency Table Data Fields | `hw_flow_efficiency` |
+| Flume | Flume Data Fields | `hw_flume` |
+| Head discharge | Head Discharge Tables | `hw_head_discharge` |
+| Headloss curve | Headloss Curve Data Fields | `hw_headloss` |
+| Inline bank | Inline Bank Data Fields | `hw_inline_bank` |
+| Irregular weir | Irregular Weir Data Fields | `hw_irregular_weir` |
+| Orifice | Orifice Data Fields (InfoWorks) | `hw_orifice` |
+| Pump | Pump Data Fields (InfoWorks) | `hw_pump` |
+| River Reach | River Reach Data Fields (InfoWorks) | `hw_river_reach` |
+| Screen | Screen Data Fields | `hw_screen` |
+| Sediment grading | Sediment Grading Data Fields | `hw_sediment_grading` |
+| Shape | Shape Data Fields | `hw_shape` |
+| Siphon | Siphon Data Fields | `hw_siphon` |
+| Sluice | Sluice Data Fields | `hw_sluice` |
+| User control | User-Defined Control Data Fields | `hw_user_control` |
+| Weir | Weir Data Fields (InfoWorks) | `hw_weir` |
 
 ### Subcatchments Grid
 
-| Object | Data Fields Topic | Internal Table | Status |
-|--------|-------------------|----------------|--------|
-| Build-up/washoff land use | Build-up/Washoff Land Use Data Fields | `hw_swmm_land_use` | `repo-extracted` |
-| Land use | Land Use Data Fields (InfoWorks) | `hw_land_use` | `repo-extracted` |
-| Ground infiltration | Ground Infiltration Data Fields | `hw_ground_infiltration` | `repo-extracted` |
-| PDM Descriptor | PDM Descriptor Data Fields | `hw_pdm_descriptor` | `repo-extracted` |
-| Monthly RTK hydrograph | Monthly RTK Hydrograph Data Fields | `hw_unit_hydrograph_month` | `repo-extracted` |
-| RTK hydrograph | RTK Hydrograph Data Fields | `hw_unit_hydrograph` | `repo-extracted` |
-| Runoff surfaces | Runoff Surfaces Data Fields | `hw_runoff_surface` | `repo-extracted` |
-| Snow pack | Snow Pack Data Fields (InfoWorks) | `hw_snow_pack` | `repo-extracted` |
-| Subcatchment | Subcatchment Data Fields (InfoWorks) | `hw_subcatchment` | `verified` |
-| SUDS controls | SUDS Controls Data Fields | `hw_suds_control` | `verified` |
+| Object | Data Fields Topic | Internal Table | Notes |
+|--------|-------------------|----------------|-------|
+| Build-up/washoff land use | Build-up/Washoff Land Use Data Fields | `hw_swmm_land_use` | InfoWorks network object — 'swmm' in internal table name does NOT indicate a SWMM network object |
+| Land use | Land Use Data Fields (InfoWorks) | `hw_land_use` | |
+| Ground infiltration | Ground Infiltration Data Fields | `hw_ground_infiltration` | |
+| PDM Descriptor | PDM Descriptor Data Fields | `hw_pdm_descriptor` | |
+| Monthly RTK hydrograph | Monthly RTK Hydrograph Data Fields | `hw_unit_hydrograph_month` | |
+| RTK hydrograph | RTK Hydrograph Data Fields | `hw_unit_hydrograph` | |
+| Runoff surfaces | Runoff Surfaces Data Fields | `hw_runoff_surface` | |
+| Snow pack | Snow Pack Data Fields (InfoWorks) | `hw_snow_pack` | |
+| Subcatchment | Subcatchment Data Fields (InfoWorks) | `hw_subcatchment` | |
+| SUDS controls | SUDS Controls Data Fields | `hw_suds_control` | |
 
 ### Polygons Grid
 
-| Object | Data Fields Topic | Internal Table | Status |
-|--------|-------------------|----------------|--------|
-| Polygon | Polygon Data Fields (InfoWorks) | `hw_polygon` | `repo-extracted` |
-| Storage area | Storage Area Data Fields | `hw_storage_area` | `repo-extracted` |
-| 2D zone | 2D Zone Data Fields (InfoWorks) | `hw_2d_zone` | `repo-extracted` |
-| Mesh zone | Mesh Zone Data Fields (InfoWorks) | `hw_mesh_zone` | `repo-extracted` |
-| Mesh level zone | Mesh Level Zone Data Fields (InfoWorks) | `hw_mesh_level_zone` | `repo-extracted` |
-| Roughness zone | Roughness Zone Data Fields (InfoWorks) | `hw_roughness_zone` | `repo-extracted` |
-| Roughness definitions | Roughness Definition Data Fields | `hw_roughness_definition` | `repo-extracted` |
-| IC zone - hydraulics (2D) | IC Zone - hydraulics (2D) Data Fields | `hw_2d_ic_polygon` | `repo-extracted` |
-| IC zone - water quality (2D) | IC Zone - water quality (2D) Data Fields | `hw_2d_wq_ic_polygon` | `repo-extracted` |
-| IC zone - infiltration (2D) | IC Zone - infiltration (2D) Data Fields | `hw_2d_inf_ic_polygon` | `repo-extracted` |
-| IC zone - sedimentation (2D) | IC Zone - Sediment (2D) Data Fields | `hw_2d_sed_ic_polygon` | `repo-extracted` |
-| Porous polygon | Porous Polygon Data Fields (InfoWorks) | `hw_porous_polygon` | `repo-extracted` |
-| Infiltration zone (2D) | Infiltration Zone (2D) Data Fields | `hw_2d_infiltration_zone` | `repo-extracted` |
-| Infiltration surface (2D) | Infiltration Surface (2D) Data Fields | `hw_2d_infil_surface` | `repo-extracted` |
-| Turbulence zone (2D) | Turbulence Zone (2D) Data Fields | `hw_2d_turbulence_zone` | `repo-extracted` |
-| Turbulence model (2D) | Turbulence Model (2D) Data Fields | `hw_2d_turbulence_model` | `repo-extracted` |
-| Permeable zone (2D) | Permeable Zone (2D) Data Fields | `hw_2d_permeable_zone` | `repo-extracted` |
-| TVD connector | TVD Connector Data Fields (InfoWorks) | `hw_tvd_connector` | `repo-extracted` |
-| Spatial rain zone | Spatial Rain Zone Data Fields (InfoWorks) | `hw_spatial_rain_zone` | `repo-extracted` |
-| Spatial rain source | Spatial Rain Source Data Fields (InfoWorks) | `hw_spatial_rain_source` | `repo-extracted` |
-| Network results polygon (2D) | Network Results Polygon (2D) Data Fields | `hw_2d_results_polygon` | `repo-extracted` |
-| Risk impact zone | Risk Impact Zone Data Fields | `hw_risk_impact_zone` | `repo-extracted` |
-| ARMA | ARMA Data Fields | `hw_arma` | `repo-extracted` |
-| Building | Building Data Fields (InfoWorks) | `hw_building` | `repo-extracted` |
+| Object | Data Fields Topic | Internal Table |
+|--------|-------------------|----------------|
+| Polygon | Polygon Data Fields (InfoWorks) | `hw_polygon` |
+| Storage area | Storage Area Data Fields | `hw_storage_area` |
+| 2D zone | 2D Zone Data Fields (InfoWorks) | `hw_2d_zone` |
+| Mesh zone | Mesh Zone Data Fields (InfoWorks) | `hw_mesh_zone` |
+| Mesh level zone | Mesh Level Zone Data Fields (InfoWorks) | `hw_mesh_level_zone` |
+| Roughness zone | Roughness Zone Data Fields (InfoWorks) | `hw_roughness_zone` |
+| Roughness definitions | Roughness Definition Data Fields | `hw_roughness_definition` |
+| IC zone - hydraulics (2D) | IC Zone - hydraulics (2D) Data Fields | `hw_2d_ic_polygon` |
+| IC zone - water quality (2D) | IC Zone - water quality (2D) Data Fields | `hw_2d_wq_ic_polygon` |
+| IC zone - infiltration (2D) | IC Zone - infiltration (2D) Data Fields | `hw_2d_inf_ic_polygon` |
+| IC zone - sedimentation (2D) | IC Zone - Sediment (2D) Data Fields | `hw_2d_sed_ic_polygon` |
+| Porous polygon | Porous Polygon Data Fields (InfoWorks) | `hw_porous_polygon` |
+| Infiltration zone (2D) | Infiltration Zone (2D) Data Fields | `hw_2d_infiltration_zone` |
+| Infiltration surface (2D) | Infiltration Surface (2D) Data Fields | `hw_2d_infil_surface` |
+| Turbulence zone (2D) | Turbulence Zone (2D) Data Fields | `hw_2d_turbulence_zone` |
+| Turbulence model (2D) | Turbulence Model (2D) Data Fields | `hw_2d_turbulence_model` |
+| Permeable zone (2D) | Permeable Zone (2D) Data Fields | `hw_2d_permeable_zone` |
+| TVD connector | TVD Connector Data Fields (InfoWorks) | `hw_tvd_connector` |
+| Spatial rain zone | Spatial Rain Zone Data Fields (InfoWorks) | `hw_spatial_rain_zone` |
+| Spatial rain source | Spatial Rain Source Data Fields (InfoWorks) | `hw_spatial_rain_source` |
+| Network results polygon (2D) | Network Results Polygon (2D) Data Fields | `hw_2d_results_polygon` |
+| Risk impact zone | Risk Impact Zone Data Fields | `hw_risk_impact_zone` |
+| ARMA | ARMA Data Fields | `hw_arma` |
+| Building | Building Data Fields (InfoWorks) | `hw_building` |
 
 ### Lines Grid
 
-| Object | Data Fields Topic | Internal Table | Status |
-|--------|-------------------|----------------|--------|
-| General line | General Line Data Fields (InfoWorks) | `hw_general_line` | `repo-extracted` |
-| Cross section line | Cross Section Line Data Fields | `hw_cross_section_survey` | `repo-extracted` |
-| Bank line | Bank Line Data Fields | `hw_bank_survey` | `repo-extracted` |
-| Porous wall | Porous Wall Data Fields (InfoWorks) | `hw_porous_wall` | `repo-extracted` |
-| Base linear structure (2D) | Base Linear Structure (2D) Data Fields | `hw_2d_linear_structure` | `repo-extracted` |
-| Sluice linear structure (2D) | Sluice Linear Structure (2D) Data Fields | `hw_2d_sluice` | `repo-extracted` |
-| Bridge linear structure (2D) | Bridge Linear Structure (2D) Data Fields | `hw_2d_bridge` | `repo-extracted` |
-| 2D boundary | 2D Boundary Line Data Fields | `hw_2d_boundary_line` | `repo-extracted` |
-| Network results line (2D) | Network Results Line (2D) Data Fields | `hw_2d_results_line` | `repo-extracted` |
-| 2D line source | 2D Line Source Data Fields | `hw_2d_line_source` | `repo-extracted` |
-| 2D line connect | 2D Line Connect Data Fields | `hw_2d_connect_line` | `repo-extracted` |
-| Head unit flow | Head Unit Flow Data Fields | `hw_head_unit_discharge` | `repo-extracted` |
+| Object | Data Fields Topic | Internal Table |
+|--------|-------------------|----------------|
+| General line | General Line Data Fields (InfoWorks) | `hw_general_line` |
+| Cross section line | Cross Section Line Data Fields | `hw_cross_section_survey` |
+| Bank line | Bank Line Data Fields | `hw_bank_survey` |
+| Porous wall | Porous Wall Data Fields (InfoWorks) | `hw_porous_wall` |
+| Base linear structure (2D) | Base Linear Structure (2D) Data Fields | `hw_2d_linear_structure` |
+| Sluice linear structure (2D) | Sluice Linear Structure (2D) Data Fields | `hw_2d_sluice` |
+| Bridge linear structure (2D) | Bridge Linear Structure (2D) Data Fields | `hw_2d_bridge` |
+| 2D boundary | 2D Boundary Line Data Fields | `hw_2d_boundary_line` |
+| Network results line (2D) | Network Results Line (2D) Data Fields | `hw_2d_results_line` |
+| 2D line source | 2D Line Source Data Fields | `hw_2d_line_source` |
+| 2D line connect | 2D Line Connect Data Fields | `hw_2d_connect_line` |
+| Head unit flow | Head Unit Flow Data Fields | `hw_head_unit_discharge` |
 
 ### Points Grid
 
-| Object | Data Fields Topic | Internal Table | Status |
-|--------|-------------------|----------------|--------|
-| General point | General Point Data Fields | `hw_general_point` | `repo-extracted` |
-| 2D point source | 2D Point Source Data Fields | `hw_2d_point_source` | `repo-extracted` |
-| Network results point (1D) | Network Results Point (1D) Data Fields | `hw_1d_results_point` | `repo-extracted` |
-| Network results point (2D) | Network Results Point (2D) Data Fields | `hw_2d_results_point` | `repo-extracted` |
-| Damage receptor | Damage Receptor Data Fields | `hw_damage_receptor` | `repo-extracted` |
+| Object | Data Fields Topic | Internal Table |
+|--------|-------------------|----------------|
+| General point | General Point Data Fields | `hw_general_point` |
+| 2D point source | 2D Point Source Data Fields | `hw_2d_point_source` |
+| Network results point (1D) | Network Results Point (1D) Data Fields | `hw_1d_results_point` | `` |
+| Network results point (2D) | Network Results Point (2D) Data Fields | `hw_2d_results_point` | `` |
+| Damage receptor | Damage Receptor Data Fields | `hw_damage_receptor` | `` |
 
 ---
 
@@ -164,83 +167,77 @@ All InfoWorks field tables are indexed here. For common fields (`user_text_*`, `
 
 #### Node (`hw_node`)
 
-> **Provenance:** Identifiers, coordinates, elevations from Autodesk Help (verified). All other fields repo-extracted from `hw_parameters.rb`. `_flag` variants exist for most scalar fields (e.g., `node_id_flag`) — ICM internal state-tracking, not listed separately.
-
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
 | Node ID | `node_id` | scalar | |
 | Node Type | `node_type` | scalar | 'manhole', 'outfall', 'storage', 'break', 'closed_storage', 'gully' |
 | System Type | `system_type` | scalar | 'foul', 'storm', 'combined', 'dual_foul', 'dual_storm' |
-| Connection Type | `connection_type` | scalar | repo-extracted |
-| Asset ID | `asset_id` | scalar | repo-extracted |
-| 2D Connect Line | `2d_connect_line` | scalar | repo-extracted; linked 2D connection line object |
-| Lateral Node ID | `lateral_node_id` | scalar | repo-extracted; lateral inflow node link |
-| Lateral Link Suffix | `lateral_link_suffix` | scalar | repo-extracted |
+| Connection Type | `connection_type` | scalar |  |
+| Asset ID | `asset_id` | scalar |  |
+| 2D Connect Line | `2d_connect_line` | scalar | linked 2D connection line object |
+| Lateral Node ID | `lateral_node_id` | scalar | lateral inflow node link |
+| Lateral Link Suffix | `lateral_link_suffix` | scalar |  |
 | X Coordinate | `x` | scalar | |
 | Y Coordinate | `y` | scalar | |
 | Ground Level | `ground_level` | scalar | |
-| Flood Level | `flood_level` | scalar | repo-extracted; surcharge/flood engagement level |
-| Chamber Roof | `chamber_roof` | scalar | repo-extracted; soffit level of chamber |
-| Chamber Floor Level | `chamber_floor_level` | scalar | Node invert level; Ruby param name is `chamber_floor` |
-| Chamber Area | `chamber_area` | scalar | repo-extracted |
+| Flood Level | `flood_level` | scalar | surcharge/flood engagement level |
+| Chamber Roof | `chamber_roof` | scalar | soffit level of chamber |
+| Chamber Floor Level | `chamber_floor_level` | scalar | Node invert level |
+| Chamber Area | `chamber_area` | scalar |  |
 | Shaft Area | `shaft_area` | scalar | Cross-sectional area of shaft |
-| Shaft Area Additional | `shaft_area_additional` | scalar | repo-extracted; extra shaft area above node |
-| Chamber Area Additional | `chamber_area_additional` | scalar | repo-extracted; extra chamber area above node |
-| Base Area | `base_area` | scalar | repo-extracted |
-| Perimeter | `perimeter` | scalar | repo-extracted |
+| Shaft Area Additional | `shaft_area_additional` | scalar | extra shaft area above node |
+| Chamber Area Additional | `chamber_area_additional` | scalar | extra chamber area above node |
+| Base Area | `base_area` | scalar |  |
+| Perimeter | `perimeter` | scalar |  |
 | Flood Type | `flood_type` | scalar | 'surface', 'sealed', 'lost', 'stored', 'gully', 'inlet', 'linked2d' |
-| Element Area Factor 2D | `element_area_factor_2d` | scalar | repo-extracted; 2D mesh factor |
-| Flooding Discharge Coefficient | `flooding_discharge_coeff` | scalar | repo-extracted |
-| Benching Method | `benching_method` | scalar | repo-extracted; channel benching method |
-| 2D Link Type | `2d_link_type` | scalar | repo-extracted |
-| Floodable Area | `floodable_area` | scalar | repo-extracted; surface ponding area |
-| Flood Depth 1 | `flood_depth_1` | scalar | repo-extracted; ponding zone 1 depth |
-| Flood Depth 2 | `flood_depth_2` | scalar | repo-extracted; ponding zone 2 depth |
-| Flood Area 1 | `flood_area_1` | scalar | repo-extracted; ponding zone 1 area |
-| Flood Area 2 | `flood_area_2` | scalar | repo-extracted; ponding zone 2 area |
-| Infiltration Coefficient | `infiltration_coeff` | scalar | repo-extracted; SuDS/permeable node |
-| Porosity | `porosity` | scalar | repo-extracted |
-| Vegetation Level | `vegetation_level` | scalar | repo-extracted; SuDS node vegetation depth |
-| Liner Level | `liner_level` | scalar | repo-extracted; SuDS node liner depth |
-| Infilt Coeff Above Vegetation | `infiltratn_coeff_abv_vegn` | scalar | repo-extracted |
-| Infilt Coeff Above Liner | `infiltratn_coeff_abv_liner` | scalar | repo-extracted |
-| Infilt Coeff Below Liner | `infiltratn_coeff_blw_liner` | scalar | repo-extracted |
-| Relative Stages | `relative_stages` | scalar | repo-extracted |
+| Element Area Factor 2D | `element_area_factor_2d` | scalar | 2D mesh factor |
+| Flooding Discharge Coefficient | `flooding_discharge_coeff` | scalar |  |
+| Benching Method | `benching_method` | scalar | channel benching method |
+| 2D Link Type | `2d_link_type` | scalar |  |
+| Floodable Area | `floodable_area` | scalar | surface ponding area |
+| Flood Depth 1 | `flood_depth_1` | scalar | ponding zone 1 depth |
+| Flood Depth 2 | `flood_depth_2` | scalar | ponding zone 2 depth |
+| Flood Area 1 | `flood_area_1` | scalar | ponding zone 1 area |
+| Flood Area 2 | `flood_area_2` | scalar | ponding zone 2 area |
+| Infiltration Coefficient | `infiltration_coeff` | scalar | SuDS/permeable node |
+| Porosity | `porosity` | scalar |  |
+| Vegetation Level | `vegetation_level` | scalar | SuDS node vegetation depth |
+| Liner Level | `liner_level` | scalar | SuDS node liner depth |
+| Infilt Coeff Above Vegetation | `infiltratn_coeff_abv_vegn` | scalar |  |
+| Infilt Coeff Above Liner | `infiltratn_coeff_abv_liner` | scalar |  |
+| Infilt Coeff Below Liner | `infiltratn_coeff_blw_liner` | scalar |  |
+| Relative Stages | `relative_stages` | scalar |  |
 | Storage Array | `storage_array` | blob | Sub-fields: `storage_array.level`, `storage_array.area`, `storage_array.perimeter` |
-| Inlet Input Type | `inlet_input_type` | scalar | repo-extracted; gully/inlet node |
-| Inlet Type | `inlet_type` | scalar | repo-extracted; gully/inlet node |
-| Cross Slope | `cross_slope` | scalar | repo-extracted; gully/inlet node road slope |
-| Grate Width | `grate_width` | scalar | repo-extracted; gully/inlet node |
-| Grate Length | `grate_length` | scalar | repo-extracted; gully/inlet node |
-| Opening Length | `opening_length` | scalar | repo-extracted; gully/inlet node |
-| Opening Height | `opening_height` | scalar | repo-extracted; gully/inlet node |
-| Gutter Depression | `gutter_depression` | scalar | repo-extracted; gully/inlet node |
-| Lateral Depression | `lateral_depression` | scalar | repo-extracted; gully/inlet node |
-| Velocity Splash Over | `velocity_splashover` | scalar | repo-extracted; gully/inlet node |
-| Debris Factor | `debris` | scalar | repo-extracted; gully/inlet node |
-| Depth Weir | `depth_weir` | scalar | repo-extracted; gully/inlet node |
-| Clear Opening | `clear_opening` | scalar | repo-extracted; gully/inlet node |
-| Head Discharge ID | `head_discharge_id` | scalar | repo-extracted; links to `hw_head_discharge` table |
-| Flow Efficiency ID | `flow_efficiency_id` | scalar | repo-extracted; links to `hw_flow_efficiency` table |
-| Inlet UE a | `inlet_UE_a` | scalar | repo-extracted; gully efficiency coefficient a |
-| Inlet UE b | `inlet_UE_b` | scalar | repo-extracted; gully efficiency coefficient b |
-| Number of Gullies | `n_gullies` | scalar | repo-extracted; gully/inlet node |
-| Num Transverse Bars | `num_transverse_bars` | scalar | repo-extracted; grate type specification |
-| Num Longitudinal Bars | `num_longitudinal_bars` | scalar | repo-extracted; grate type specification |
-| Num Diagonal Bars | `num_diagonal_bars` | scalar | repo-extracted; grate type specification |
-| Min Area Including Voids | `min_area_inc_voids` | scalar | repo-extracted |
-| Area of Voids | `area_of_voids` | scalar | repo-extracted |
-| Half Road Width | `half_road_width` | scalar | repo-extracted; gully/inlet node |
-| Notes | `notes` | scalar | Common data field |
-| Hyperlinks | `hyperlinks` | blob | Sub-fields: `hyperlinks.description`, `hyperlinks.url` |
-| User Number 1–10 | `user_number_1` to `user_number_10` | scalar | Common data fields |
-| User Text 1–10 | `user_text_1` to `user_text_10` | scalar | Common data fields |
+| Inlet Input Type | `inlet_input_type` | scalar | gully/inlet node |
+| Inlet Type | `inlet_type` | scalar | gully/inlet node |
+| Cross Slope | `cross_slope` | scalar | gully/inlet node road slope |
+| Grate Width | `grate_width` | scalar | gully/inlet node |
+| Grate Length | `grate_length` | scalar | gully/inlet node |
+| Opening Length | `opening_length` | scalar | gully/inlet node |
+| Opening Height | `opening_height` | scalar | gully/inlet node |
+| Gutter Depression | `gutter_depression` | scalar | gully/inlet node |
+| Lateral Depression | `lateral_depression` | scalar | gully/inlet node |
+| Velocity Splash Over | `velocity_splashover` | scalar | gully/inlet node |
+| Debris Factor | `debris` | scalar | gully/inlet node |
+| Depth Weir | `depth_weir` | scalar | gully/inlet node |
+| Clear Opening | `clear_opening` | scalar | gully/inlet node |
+| Head Discharge ID | `head_discharge_id` | scalar | links to `hw_head_discharge` table |
+| Flow Efficiency ID | `flow_efficiency_id` | scalar | links to `hw_flow_efficiency` table |
+| Inlet UE a | `inlet_UE_a` | scalar | gully efficiency coefficient a |
+| Inlet UE b | `inlet_UE_b` | scalar | gully efficiency coefficient b |
+| Number of Gullies | `n_gullies` | scalar | gully/inlet node |
+| Num Transverse Bars | `num_transverse_bars` | scalar | grate type specification |
+| Num Longitudinal Bars | `num_longitudinal_bars` | scalar | grate type specification |
+| Num Diagonal Bars | `num_diagonal_bars` | scalar | grate type specification |
+| Min Area Including Voids | `min_area_inc_voids` | scalar |  |
+| Area of Voids | `area_of_voids` | scalar |  |
+| Half Road Width | `half_road_width` | scalar | gully/inlet node |
+
+> Common data fields (`user_text_1`–`10`, `user_number_1`–`10`, `notes`, `hyperlinks`) apply to this object — see `Schema_Common.md`.
 
 ### Links
 
 #### Conduit (`hw_conduit`)
-
-> **Provenance:** Core topology/geometry/roughness fields from Autodesk Help (verified). All other fields repo-extracted from `hw_parameters.rb`. `_flag` variants exist for most scalar fields. NOTE: `conduit_width`/`conduit_height` are also correct in SWMM networks — a previous warning here was incorrect. The key difference is length: `conduit_length` (InfoWorks) vs `length` (SWMM).
 
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
@@ -249,78 +246,76 @@ All InfoWorks field tables are indexed here. For common fields (`user_text_*`, `
 | Link Suffix | `link_suffix` | scalar | |
 | Link Type | `link_type` | scalar | |
 | System Type | `system_type` | scalar | 'foul', 'storm', 'combined', 'dual_foul', 'dual_storm' |
-| Asset ID | `asset_id` | scalar | repo-extracted |
-| Sewer Reference | `sewer_reference` | scalar | repo-extracted |
-| Branch ID | `branch_id` | scalar | repo-extracted |
-| Conduit Material | `conduit_material` | scalar | repo-extracted; CORRECTED from `material` |
-| Conduit Type | `conduit_type` | scalar | repo-extracted |
-| Design Group | `design_group` | scalar | repo-extracted |
-| Site Condition | `site_condition` | scalar | repo-extracted |
-| Ground Condition | `ground_condition` | scalar | repo-extracted |
+| Asset ID | `asset_id` | scalar |  |
+| Sewer Reference | `sewer_reference` | scalar |  |
+| Branch ID | `branch_id` | scalar |  |
+| Conduit Material | `conduit_material` | scalar | CORRECTED from `material` |
+| Conduit Type | `conduit_type` | scalar |  |
+| Design Group | `design_group` | scalar |  |
+| Site Condition | `site_condition` | scalar |  |
+| Ground Condition | `ground_condition` | scalar |  |
 | Shape | `shape` | scalar | Cross-section shape code |
 | Width | `conduit_width` | scalar | Conduit width/diameter |
 | Height | `conduit_height` | scalar | Conduit height |
-| Springing Height | `springing_height` | scalar | repo-extracted; horseshoe/special shapes |
-| Number of Barrels | `number_of_barrels` | scalar | repo-extracted |
+| Springing Height | `springing_height` | scalar | horseshoe/special shapes |
+| Number of Barrels | `number_of_barrels` | scalar |  |
 | Length | `conduit_length` | scalar | InfoWorks pipe length; SWMM uses `length` |
 | Upstream Invert | `us_invert` | scalar | |
 | Downstream Invert | `ds_invert` | scalar | |
-| Gradient | `gradient` | scalar | repo-extracted; invert slope |
-| Capacity | `capacity` | scalar | repo-extracted |
-| Inflow | `inflow` | scalar | repo-extracted; base inflow |
-| Slot Width | `slot_width` | scalar | repo-extracted; Preissmann slot width |
-| Connection Coefficient | `connection_coefficient` | scalar | repo-extracted |
-| Base Height | `base_height` | scalar | repo-extracted |
-| Sediment Depth | `sediment_depth` | scalar | repo-extracted |
-| Min Space Step | `min_space_step` | scalar | repo-extracted |
+| Gradient | `gradient` | scalar | invert slope |
+| Capacity | `capacity` | scalar |  |
+| Inflow | `inflow` | scalar | base inflow |
+| Slot Width | `slot_width` | scalar | Preissmann slot width |
+| Connection Coefficient | `connection_coefficient` | scalar |  |
+| Base Height | `base_height` | scalar |  |
+| Sediment Depth | `sediment_depth` | scalar |  |
+| Min Space Step | `min_space_step` | scalar |  |
 | Roughness Type | `roughness_type` | scalar | |
 | Bottom Roughness (CW) | `bottom_roughness_CW` | scalar | Chezy-White bottom roughness |
 | Top Roughness (CW) | `top_roughness_CW` | scalar | Chezy-White top roughness |
 | Bottom Roughness (Manning) | `bottom_roughness_Manning` | scalar | Manning's n bottom |
 | Top Roughness (Manning) | `top_roughness_Manning` | scalar | Manning's n top |
-| Bottom Roughness N | `bottom_roughness_N` | scalar | repo-extracted |
-| Top Roughness N | `top_roughness_N` | scalar | repo-extracted |
+| Bottom Roughness N | `bottom_roughness_N` | scalar |  |
+| Top Roughness N | `top_roughness_N` | scalar |  |
 | Bottom Roughness (HW) | `bottom_roughness_HW` | scalar | Hazen-Williams bottom |
 | Top Roughness (HW) | `top_roughness_HW` | scalar | Hazen-Williams top |
 | US Headloss Type | `us_headloss_type` | scalar | |
 | DS Headloss Type | `ds_headloss_type` | scalar | |
 | US Headloss Coefficient | `us_headloss_coeff` | scalar | |
 | DS Headloss Coefficient | `ds_headloss_coeff` | scalar | |
-| US Settlement Efficiency | `us_settlement_eff` | scalar | repo-extracted |
-| DS Settlement Efficiency | `ds_settlement_eff` | scalar | repo-extracted |
-| Critical Sewer Category | `critical_sewer_category` | scalar | repo-extracted |
-| Taking Off Reference | `taking_off_reference` | scalar | repo-extracted |
-| Solution Model | `solution_model` | scalar | repo-extracted |
-| Min Computational Nodes | `min_computational_nodes` | scalar | repo-extracted |
-| Infiltration Coeff Base | `infiltration_coeff_base` | scalar | repo-extracted |
-| Infiltration Coeff Side | `infiltration_coeff_side` | scalar | repo-extracted |
-| Fill Material Conductivity | `fill_material_conductivity` | scalar | repo-extracted |
-| Porosity | `porosity` | scalar | repo-extracted |
-| Diff1D Type | `diff1d_type` | scalar | repo-extracted |
-| Diff1D D0 | `diff1d_d0` | scalar | repo-extracted |
-| Diff1D D1 | `diff1d_d1` | scalar | repo-extracted |
-| Diff1D D2 | `diff1d_d2` | scalar | repo-extracted |
-| Inlet Type Code | `inlet_type_code` | scalar | repo-extracted; HEC standard inlet type |
-| Reverse Flow Model | `reverse_flow_model` | scalar | repo-extracted |
-| Equation | `equation` | scalar | repo-extracted; culvert equation type |
-| k | `k` | scalar | repo-extracted; culvert equation coefficient |
-| m | `m` | scalar | repo-extracted; culvert equation coefficient |
-| c | `c` | scalar | repo-extracted; culvert equation coefficient |
-| y | `y` | scalar | repo-extracted; culvert equation coefficient |
-| US Ki (inlet) | `us_ki` | scalar | repo-extracted; culvert entry loss |
-| US Ko (outlet) | `us_ko` | scalar | repo-extracted; culvert exit loss |
-| Outlet Type Code | `outlet_type_code` | scalar | repo-extracted |
-| Outlet Equation | `equation_o` | scalar | repo-extracted |
-| Outlet k | `k_o` | scalar | repo-extracted |
-| Outlet m | `m_o` | scalar | repo-extracted |
-| Outlet c | `c_o` | scalar | repo-extracted |
-| Outlet y | `y_o` | scalar | repo-extracted |
-| DS Ki | `ds_ki` | scalar | repo-extracted |
-| DS Ko | `ds_ko` | scalar | repo-extracted |
-| Notes | `notes` | scalar | Common data field |
-| Hyperlinks | `hyperlinks` | blob | Sub-fields: `hyperlinks.description`, `hyperlinks.url` |
-| User Number 1–10 | `user_number_1` to `user_number_10` | scalar | Common data fields |
-| User Text 1–10 | `user_text_1` to `user_text_10` | scalar | Common data fields |
+| US Settlement Efficiency | `us_settlement_eff` | scalar |  |
+| DS Settlement Efficiency | `ds_settlement_eff` | scalar |  |
+| Critical Sewer Category | `critical_sewer_category` | scalar |  |
+| Taking Off Reference | `taking_off_reference` | scalar |  |
+| Solution Model | `solution_model` | scalar |  |
+| Min Computational Nodes | `min_computational_nodes` | scalar |  |
+| Infiltration Coeff Base | `infiltration_coeff_base` | scalar |  |
+| Infiltration Coeff Side | `infiltration_coeff_side` | scalar |  |
+| Fill Material Conductivity | `fill_material_conductivity` | scalar |  |
+| Porosity | `porosity` | scalar |  |
+| Diff1D Type | `diff1d_type` | scalar |  |
+| Diff1D D0 | `diff1d_d0` | scalar |  |
+| Diff1D D1 | `diff1d_d1` | scalar |  |
+| Diff1D D2 | `diff1d_d2` | scalar |  |
+| Inlet Type Code | `inlet_type_code` | scalar | HEC standard inlet type |
+| Reverse Flow Model | `reverse_flow_model` | scalar |  |
+| Equation | `equation` | scalar | culvert equation type |
+| k | `k` | scalar | culvert equation coefficient |
+| m | `m` | scalar | culvert equation coefficient |
+| c | `c` | scalar | culvert equation coefficient |
+| y | `y` | scalar | culvert equation coefficient |
+| US Ki (inlet) | `us_ki` | scalar | culvert entry loss |
+| US Ko (outlet) | `us_ko` | scalar | culvert exit loss |
+| Outlet Type Code | `outlet_type_code` | scalar |  |
+| Outlet Equation | `equation_o` | scalar |  |
+| Outlet k | `k_o` | scalar |  |
+| Outlet m | `m_o` | scalar |  |
+| Outlet c | `c_o` | scalar |  |
+| Outlet y | `y_o` | scalar |  |
+| DS Ki | `ds_ki` | scalar |  |
+| DS Ko | `ds_ko` | scalar |  |
+
+> Common data fields (`user_text_1`–`10`, `user_number_1`–`10`, `notes`, `hyperlinks`) apply to this object — see `Schema_Common.md`.
 
 #### Pump (`hw_pump`)
 
@@ -810,13 +805,11 @@ All InfoWorks field tables are indexed here. For common fields (`user_text_*`, `
 | Profile Roughness N | `profile.roughness_N` | blob | Channel/profile roughness field |
 | Profile Roughness Manning | `profile.roughness_Manning` | blob | Channel/profile roughness field |
 
-**⚠️ High-risk object:** Never use `left_bank_discharge_coeff`. Use `left_bank.discharge_coeff` (dot notation required).
+**High-risk object:** Never use `left_bank_discharge_coeff`. Use `left_bank.discharge_coeff` (dot notation required).
 
 ### Subcatchments
 
 #### Subcatchment (`hw_subcatchment`)
-
-> **Provenance:** Core routing/area fields verified. All other fields repo-extracted from `hw_parameters.rb` (255-field object). This table covers the most commonly queried fields; the full list is exhaustive. `_flag` variants exist for most scalar fields.
 
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
@@ -828,27 +821,27 @@ All InfoWorks field tables are indexed here. For common fields (`user_text_*`, `
 | To Subcatchment ID | `to_subcatchment_id` | scalar | Subcatchment-to-subcatchment routing |
 | 2D Point ID | `2d_pt_id` | scalar | Linked 2D point for 2D routing |
 | Contributing Area | `contributing_area` | scalar | InfoWorks area field; NOT `area` |
-| Total Area | `total_area` | scalar | repo-extracted |
-| Capacity Limit | `capacity_limit` | scalar | repo-extracted |
-| Exceed Flow Type | `exceed_flow_type` | scalar | repo-extracted; behaviour when capacity exceeded |
-| X Coordinate | `x` | scalar | repo-extracted |
-| Y Coordinate | `y` | scalar | repo-extracted |
-| Catchment Slope | `catchment_slope` | scalar | repo-extracted |
-| Soil Class | `soil_class` | scalar | repo-extracted |
-| Soil Class Type | `soil_class_type` | scalar | repo-extracted |
-| Soil Class Host | `soil_class_host` | scalar | repo-extracted |
-| Max Soil Moisture Capacity | `max_soil_moisture_capacity` | scalar | repo-extracted |
+| Total Area | `total_area` | scalar |  |
+| Capacity Limit | `capacity_limit` | scalar |  |
+| Exceed Flow Type | `exceed_flow_type` | scalar | behaviour when capacity exceeded |
+| X Coordinate | `x` | scalar |  |
+| Y Coordinate | `y` | scalar |  |
+| Catchment Slope | `catchment_slope` | scalar |  |
+| Soil Class | `soil_class` | scalar |  |
+| Soil Class Type | `soil_class_type` | scalar |  |
+| Soil Class Host | `soil_class_host` | scalar |  |
+| Max Soil Moisture Capacity | `max_soil_moisture_capacity` | scalar |  |
 | Curve Number | `curve_number` | scalar | CN infiltration field |
 | Drying Time | `drying_time` | scalar | Infiltration parameter |
-| UKWIR Soil Runoff | `ukwir_soil_runoff` | scalar | repo-extracted |
+| UKWIR Soil Runoff | `ukwir_soil_runoff` | scalar |  |
 | Rainfall Profile | `rainfall_profile` | scalar | Linked rainfall profile |
 | Evaporation Profile | `evaporation_profile` | scalar | Linked evaporation profile |
-| Area Average Rain | `area_average_rain` | scalar | repo-extracted |
-| Catchment Dimension | `catchment_dimension` | scalar | repo-extracted |
+| Area Average Rain | `area_average_rain` | scalar |  |
+| Catchment Dimension | `catchment_dimension` | scalar |  |
 | Unit Hydrograph ID | `unit_hydrograph_id` | scalar | Linked RTK/UH table |
 | Snow Pack ID | `snow_pack_id` | scalar | Linked snow pack |
-| Baseflow Calculation | `baseflow_calc` | scalar | repo-extracted |
-| Soil Moisture Deficit | `soil_moist_def` | scalar | repo-extracted |
+| Baseflow Calculation | `baseflow_calc` | scalar |  |
+| Soil Moisture Deficit | `soil_moist_def` | scalar |  |
 | Wastewater Profile | `wastewater_profile` | scalar | DWF foul-flow profile |
 | Population | `population` | scalar | Population-based foul flow |
 | Trade Flow | `trade_flow` | scalar | Trade effluent flow |
@@ -856,9 +849,9 @@ All InfoWorks field tables are indexed here. For common fields (`user_text_*`, `
 | Base Flow | `base_flow` | scalar | Base/dry weather flow |
 | Trade Profile | `trade_profile` | scalar | Linked trade profile |
 | Ground ID | `ground_id` | scalar | Linked ground infiltration table |
-| Ground Node | `ground_node` | scalar | repo-extracted |
-| Baseflow Lag | `baseflow_lag` | scalar | repo-extracted |
-| Baseflow Recharge | `baseflow_recharge` | scalar | repo-extracted |
+| Ground Node | `ground_node` | scalar |  |
+| Baseflow Lag | `baseflow_lag` | scalar |  |
+| Baseflow Recharge | `baseflow_recharge` | scalar |  |
 | Land Use ID | `land_use_id` | scalar | Linked land use table |
 | PDM Descriptor ID | `pdm_descriptor_id` | scalar | Linked PDM descriptor |
 | Area Measurement Type | `area_measurement_type` | scalar | Area type selector |
@@ -866,38 +859,36 @@ All InfoWorks field tables are indexed here. For common fields (`user_text_*`, `
 | Area Percent 1–12 | `area_percent_1` to `area_percent_12` | scalar | Percentage surface area splits |
 | TC Method | `tc_method` | scalar | Time-of-concentration method |
 | Time of Concentration | `time_of_concentration` | scalar | TC value |
-| Overland Flow Time | `overland_flow_time` | scalar | repo-extracted |
-| Equivalent Roughness | `equivalent_roughness` | scalar | repo-extracted |
-| Hydraulic Radius | `hydraulic_radius` | scalar | repo-extracted |
-| PWRI Coefficient | `pwri_coefficient` | scalar | repo-extracted |
-| Time to Peak | `time_to_peak` | scalar | repo-extracted |
-| Base Time | `base_time` | scalar | repo-extracted |
-| Lag Time | `lag_time` | scalar | repo-extracted |
-| Peaking Coefficient | `peaking_coeff` | scalar | repo-extracted |
-| UH Peak | `uh_peak` | scalar | repo-extracted |
-| UH Kink | `uh_kink` | scalar | repo-extracted |
-| Storage Factor | `storage_factor` | scalar | repo-extracted |
-| Storage Exponent | `storage_exponent` | scalar | repo-extracted |
-| Internal Routing | `internal_routing` | scalar | repo-extracted |
-| Percent Routed | `percent_routed` | scalar | repo-extracted |
+| Overland Flow Time | `overland_flow_time` | scalar |  |
+| Equivalent Roughness | `equivalent_roughness` | scalar |  |
+| Hydraulic Radius | `hydraulic_radius` | scalar |  |
+| PWRI Coefficient | `pwri_coefficient` | scalar |  |
+| Time to Peak | `time_to_peak` | scalar |  |
+| Base Time | `base_time` | scalar |  |
+| Lag Time | `lag_time` | scalar |  |
+| Peaking Coefficient | `peaking_coeff` | scalar |  |
+| UH Peak | `uh_peak` | scalar |  |
+| UH Kink | `uh_kink` | scalar |  |
+| Storage Factor | `storage_factor` | scalar |  |
+| Storage Exponent | `storage_exponent` | scalar |  |
+| Internal Routing | `internal_routing` | scalar |  |
+| Percent Routed | `percent_routed` | scalar |  |
 | Degree Urbanisation | `degree_urbanisation` | scalar | RAFTS field |
 | RAFTS Adaptation Factor | `rafts_adapt_factor` | scalar | RAFTS field |
 | RAFTS b | `rafts_b` | scalar | RAFTS field |
 | RAFTS n | `rafts_n` | scalar | RAFTS field |
-| SRM Runoff Coefficient | `srm_runoff_coeff` | scalar | repo-extracted |
+| SRM Runoff Coefficient | `srm_runoff_coeff` | scalar |  |
 | ARMA ID | `arma_id` | scalar | Linked ARMA object |
-| Output Lag | `output_lag` | scalar | repo-extracted |
-| Bypass Runoff | `bypass_runoff` | scalar | repo-extracted |
-| UH Definition | `uh_definition` | scalar | repo-extracted |
+| Output Lag | `output_lag` | scalar |  |
+| Bypass Runoff | `bypass_runoff` | scalar |  |
+| UH Definition | `uh_definition` | scalar |  |
 | Connectivity | `connectivity` | scalar | Land-use connectivity |
 | Lateral Links | `lateral_links` | blob | Sub-fields: `.node_id`, `.link_suffix`, `.weight` |
 | ReFH Descriptors | `refh_descriptors` | blob | ReFH2 calibration descriptors blob |
 | SWMM Coverage | `swmm_coverage` | blob | Sub-fields: `.land_use`, `.area` |
 | Boundary Array | `boundary_array` | blob | Subcatchment polygon geometry |
-| Notes | `notes` | scalar | Common data field |
-| Hyperlinks | `hyperlinks` | blob | Sub-fields: `hyperlinks.description`, `hyperlinks.url` |
-| User Number 1–10 | `user_number_1` to `user_number_10` | scalar | Common data fields |
-| User Text 1–10 | `user_text_1` to `user_text_10` | scalar | Common data fields |
+
+> Common data fields (`user_text_1`–`10`, `user_number_1`–`10`, `notes`, `hyperlinks`) apply to this object — see `Schema_Common.md`.
 
 #### Subcatchment SuDS Controls (`hw_suds_control`)
 
@@ -1343,7 +1334,20 @@ All InfoWorks field tables are indexed here. For common fields (`user_text_*`, `
 
 ## Simulation Results
 
-Result fields use `tsr.ATTRIBUTE` syntax. See `InfoWorks_ICM_SQL_Schema_Common.md` for shared `sim.*` summary fields and `tsr.*` metadata.
+Result fields use `tsr.ATTRIBUTE` syntax. See `InfoWorks_ICM_SQL_Schema_Common.md` for `tsr.*` metadata fields.
+
+### Summary Results (`sim.*`)
+
+The `sim.*` prefix returns summary results at the current timestep or maximum. No aggregate function is needed.
+
+| UI / Meaning | Database Field | Type | Notes |
+|--------------|----------------|------|-------|
+| Downstream Depth | `sim.ds_depth` | result | InfoWorks link result |
+| Downstream Flow | `sim.ds_flow` | result | InfoWorks link result |
+| Maximum Surcharge | `sim.max_Surcharge` | result | Case-sensitive as shown |
+| Peak Catchment Flow | `sim.max_qcatch` | result | InfoWorks subcatchment |
+
+**Do not assume a `sim.*` suffix from one network type will work in the other.** SWMM-specific `sim.*` fields are in `Schema_SWMM.md`.
 
 ---
 
@@ -1410,7 +1414,7 @@ Represents the sediment fraction directly (not a determinant-sediment combinatio
 | `MW<PPP>DIS` | Washoff mass, dissolved (subcatchments) | `MWBODDIS` |
 | `MW<PPP>TOT` | Washoff mass, total (subcatchments) | `MWBODTOT` |
 
-**Direction prefixes on link/node fields** (`tsr.*` syntax omitted — these appear as Ruby results field codes):
+**Direction prefixes on link/node fields** (valid for both `sim.*` and `tsr.*` syntax):
 
 | Prefix | Meaning |
 |--------|---------|
@@ -2160,7 +2164,7 @@ Database table: `_IWR_2DResultsPoint`
 | Max ground level | `tsr.MAXGNDLEV2D` | result | Summary |
 | Max area flooded to inundation depth | `tsr.MAXFLOODED_AREA2D` | result | Summary |
 | Min flow into polygon | `tsr.MINFLOW2D` | result | Summary |
-| Min lowest depth | `tsr.MINLOWDPETH2D` | result | Summary |
+| Min lowest depth | `tsr.MINLOWDEPTH2D` | result | Summary |
 | Min lowest elevation | `tsr.MINLOWELEVATION2D` | result | Summary |
 | Min lowest speed | `tsr.MINLOWSPEED2D` | result | Summary |
 | Min enclosed volume | `tsr.MINVOLUME2D` | result | Summary |
