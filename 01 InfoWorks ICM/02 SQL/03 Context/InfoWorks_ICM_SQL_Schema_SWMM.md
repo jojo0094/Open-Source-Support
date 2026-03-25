@@ -64,13 +64,13 @@ Source: Autodesk Help `Network Data Fields` index page.
 | Object | Data Fields Topic | Internal Table |
 |--------|-------------------|----------------|
 | Conduit | Conduit Data Fields (SWMM) | `sw_conduit` |
-| Control curve | Control Curve Data Fields (SWMM) | `sw_control_curve` |
-| Shape curve | Shape Curve Data Fields (SWMM) | `sw_shape_curve` |
+| Control curve | Control Curve Data Fields (SWMM) | `sw_curve_control` |
+| Shape curve | Shape Curve Data Fields (SWMM) | `sw_curve_shape` |
 | Orifice | Orifice Curve Data Fields | `sw_orifice` |
 | Outlet | Outlet Curve Data Fields | `sw_outlet` |
 | Pump | Pump Data Fields (SWMM) | `sw_pump` |
-| Pump curve | Pump Curve Data Fields (SWMM) | `sw_pump_curve` |
-| Rating curve | Rating Curve Data Fields (SWMM) | `sw_rating_curve` |
+| Pump curve | Pump Curve Data Fields (SWMM) | `sw_curve_pump` |
+| Rating curve | Rating Curve Data Fields (SWMM) | `sw_curve_rating` |
 | Transect | Transect Data Fields (SWMM) | `sw_transect` |
 | Weir | Weir Data Fields (SWMM) | `sw_weir` |
 | Weir curve | Weir Curve Data Fields (SWMM) | `sw_curve_weir` |
@@ -152,7 +152,7 @@ All SWMM field tables are indexed here. For common fields (`user_text_*`, `user_
 | Conductivity | `conductivity` | scalar | Green-Ampt saturated hydraulic conductivity |
 | Outfall Type | `outfall_type` | scalar | 'FREE', 'NORMAL', 'FIXED', 'TIDAL', 'TIMESERIES' |
 | Flap Gate | `flap_gate` | scalar | outfall flap gate |
-| Tidal Curve ID | `tidal_curve_id` | scalar | outfall using sw_tidal_curve |
+| Tidal Curve ID | `tidal_curve_id` | scalar | outfall using sw_curve_tidal |
 | Fixed Stage | `fixed_stage` | scalar | outfall fixed stage level |
 | Storage Type | `storage_type` | scalar | 'TABULAR', 'FUNCTIONAL' |
 | Storage Curve | `storage_curve` | scalar | links to sw_curve_storage |
@@ -378,7 +378,7 @@ All SWMM field tables are indexed here. For common fields (`user_text_*`, `user_
 | Profile X | `profile.x` | blob | Transect profile blob field |
 | Profile Z | `profile.z` | blob | Transect profile blob field |
 
-#### Control Curve (`sw_control_curve`)
+#### Control Curve (`sw_curve_control`)
 
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
@@ -386,7 +386,7 @@ All SWMM field tables are indexed here. For common fields (`user_text_*`, `user_
 | Variable | `data.variable` | blob | Curve data field |
 | Setting | `data.setting` | blob | Curve data field |
 
-#### Pump Curve (`sw_pump_curve`)
+#### Pump Curve (`sw_curve_pump`)
 
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
@@ -401,7 +401,7 @@ All SWMM field tables are indexed here. For common fields (`user_text_*`, `user_
 | Pump 4 Outflow | `pump4_data.outflow` | blob | Pump-curve data field |
 | Type | `type` | scalar | Pump-curve type selector |
 
-#### Rating Curve (`sw_rating_curve`)
+#### Rating Curve (`sw_curve_rating`)
 
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
@@ -409,7 +409,7 @@ All SWMM field tables are indexed here. For common fields (`user_text_*`, `user_
 | Head | `data.head` | blob | Curve data field |
 | Outflow | `data.outflow` | blob | Curve data field |
 
-#### Shape Curve (`sw_shape_curve`)
+#### Shape Curve (`sw_curve_shape`)
 
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
