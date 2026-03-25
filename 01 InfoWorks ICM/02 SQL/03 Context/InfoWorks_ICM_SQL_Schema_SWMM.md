@@ -1,6 +1,6 @@
 # InfoWorks ICM SQL Schema — SWMM Networks
 
-**Last Updated:** March 24, 2026
+**Last Updated:** March 25, 2026
 
 **Load Priority:** LOOKUP — Load for any SWMM network SQL query requiring field names
 **Load Condition:** CONDITIONAL — When user asks about SWMM fields, schemas, or object inventory
@@ -122,7 +122,11 @@ Source: Autodesk Help `Network Data Fields` index page.
 
 ## SWMM Field Tables
 
-All SWMM field tables are indexed here. For common fields (`user_text_*`, `user_number_*`, `hyperlinks`, `notes`) and results fields (`sim.*`, `tsr.*`) see `InfoWorks_ICM_SQL_Schema_Common.md`.
+All SWMM field tables are indexed here. For results fields (`sim.*`, `tsr.*`) and shared metadata, see `InfoWorks_ICM_SQL_Schema_Common.md`.
+
+Unless stated otherwise for a specific object, every `sw_*` network object in this file also exposes `user_text_1`–`user_text_10`, `user_number_1`–`user_number_10`, `notes`, and `hyperlinks` (see `InfoWorks_ICM_SQL_Schema_Common.md`).
+
+`boundary_array`, link `point_array`, and line `general_line_xy` are intentionally omitted from the field tables below (coordinate-array fields; same omission policy as polygon boundaries).
 
 ### Nodes
 
@@ -170,8 +174,6 @@ All SWMM field tables are indexed here. For common fields (`user_text_*`, `user_
 | Pollutant inflow | `pollutant_inflows` | blob | Sub-fields: `pollutant_inflows.pollutant` |
 | Additional DWF | `additional_dwf` | blob | Sub-fields: `.baseline`, `.bf_pattern_1`–`4` |
 | Pollutant DWF | `pollutant_dwf` | blob | Sub-fields: `pollutant_dwf.pollutant` |
-
-> Common data fields (`user_text_1`–`10`, `user_number_1`–`10`, `notes`, `hyperlinks`) apply to this object — see `Schema_Common.md`.
 
 #### Unit Hydrograph Group (`sw_uh_group`)
 
@@ -223,16 +225,14 @@ All SWMM field tables are indexed here. For common fields (`user_text_*`, `user_
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
 | ID | `id` | scalar | Storage curve identifier |
-| Depth | `data.depth` | blob | Curve data field |
-| Surface Area | `data.surface_area` | blob | Curve data field |
+| Storage array | `data` | blob | Sub-fields: `data.depth`, `data.surface_area` |
 
 #### Tidal Curve (`sw_curve_tidal`)
 
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
 | ID | `id` | scalar | Tidal curve identifier |
-| Hour of day | `data.hour` | blob | Curve data field |
-| Water surface elevation | `data.elevation` | blob | Curve data field |
+| Tidal array | `data` | blob | Sub-fields: `data.hour`, `data.elevation` |
 
 ### Links
 
@@ -281,8 +281,6 @@ All SWMM field tables are indexed here. For common fields (`user_text_*`, `user_
 | Plate 31 size code | `arch_plate_31_size_code` | scalar | for ARCH shapes |
 | Steel 1/2 inch size code | `arch_steel_half_size_code` | scalar | for ARCH shapes |
 | Steel inch size code | `arch_steel_inch_size_code` | scalar | for ARCH shapes |
-
-> Common data fields (`user_text_1`–`10`, `user_number_1`–`10`, `notes`, `hyperlinks`) apply to this object — see `Schema_Common.md`.
 
 #### Shape Curve (`sw_curve_shape`)
 
@@ -418,254 +416,408 @@ All SWMM field tables are indexed here. For common fields (`user_text_*`, `user_
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
 | Subcatchment ID | `subcatchment_id` | scalar | |
-| Outlet ID | `outlet_id` | scalar | Primary receiving node/outlet |
-| Drains To | `sw_drains_to` | scalar | Routing selector |
-| Rain Gage ID | `raingauge_id` | scalar | Linked rain gage |
+| Land uses | `coverages` | blob | Sub-fields: `.land_use`, `.area` |
+| Initial buildup | `loadings` | blob | Sub-fields: `.pollutant`, `.build_up` |
+| Soils | `soil` | blob | Sub-fields: `.soil`, `.area` |
+| Rain gage ID | `raingauge_id` | scalar | Linked rain gage |
+| Drains to | `sw_drains_to` | scalar | 'sw_node', 'sw_subcatchment' |
+| Outlet | `outlet_id` | scalar | |
 | Area | `area` | scalar | SWMM area; InfoWorks uses `contributing_area` |
-| Width | `width` | scalar | Characteristic width |
-| Hydraulic Length | `hydraulic_length` | scalar |  |
-| Catchment Slope | `catchment_slope` | scalar |  |
-| Percent Impervious | `percent_impervious` | scalar | **CORRECTED** from `percent_imperv`; confirmed in SWMM SQL scripts |
-| Roughness Impervious | `roughness_impervious` | scalar | Manning's N for impervious surface |
-| Roughness Pervious | `roughness_pervious` | scalar | Manning's N for pervious surface |
-| Storage Impervious | `storage_impervious` | scalar | Depression storage impervious |
-| Storage Pervious | `storage_pervious` | scalar | Depression storage pervious |
-| Percent No Storage | `percent_no_storage` | scalar | Percentage with no depression storage |
-| Route To | `route_to` | scalar | Routed-flow destination selector |
-| Percent Routed | `percent_routed` | scalar | Percentage of flow routed |
-| Infiltration | `infiltration` | scalar | Infiltration model type selector |
-| Initial Infiltration | `initial_infiltration` | scalar | Horton/GA initial rate |
-| Limiting Infiltration | `limiting_infiltration` | scalar | Horton/GA limiting rate |
-| Decay Factor | `decay_factor` | scalar | Horton decay constant |
-| Initial Abstraction Factor | `initial_abstraction_factor` | scalar |  |
-| Drying Time | `drying_time` | scalar | Horton drying time |
-| Max Infiltration Volume | `max_infiltration_volume` | scalar | Volume limit for Horton method |
-| Initial Moisture Deficit | `initial_moisture_deficit` | scalar | Green-Ampt initial moisture deficit |
-| Average Capillary Suction | `average_capillary_suction` | scalar | Green-Ampt suction head |
-| Saturated Hydraulic Conductivity | `saturated_hydraulic_conductivity` | scalar | Green-Ampt saturated K |
-| Curve Number | `curve_number` | scalar | CN method curve number |
-| Initial Abstraction | `initial_abstraction` | scalar |  |
-| Initial Abstraction Type | `initial_abstraction_type` | scalar |  |
-| Runoff Model Type | `runoff_model_type` | scalar | Runoff model selector |
-| Shape Factor | `shape_factor` | scalar |  |
-| Time of Concentration | `time_of_concentration` | scalar |  |
-| Snow Pack ID | `snow_pack_id` | scalar | Linked snow pack |
-| Curb Length | `curb_length` | scalar | Gutter/curb length for inlet capture |
+| Hydraulic length | `hydraulic_length` | scalar |  |
+| x | `x` | scalar |  |
+| y | `y` | scalar | note: capital X in results scripts, lowercase y |
+| Subcatchment width | `width` | scalar | Characteristic width |
+| Slope | `catchment_slope` | scalar |  |
+| Use area-averaged rain | `area_average_rain` | scalar |  |
+| Imperviousness (%) | `percent_impervious` | scalar |  |
+| Impervious roughness | `roughness_impervious` | scalar | Manning's N for impervious surface |
+| Pervious roughness | `roughness_pervious` | scalar | Manning's N for pervious surface |
+| Impervious storage depth | `storage_impervious` | scalar | Depression storage impervious |
+| Pervious storage depth | `storage_pervious` | scalar | Depression storage pervious |
+| Percent no storage | `percent_no_storage` | scalar | Percentage with no depression storage |
+| Routing | `route_to` | scalar | 'Outlet', 'Impervious', 'Pervious' |
+| Infiltration model | `infiltration` | scalar | `'Default'`, `'Horton'`, `'Modified_Horton'`, `'Green_Ampt'`, `'Modified_Green_Ampt'`, `'Curve_number'` |
+| Percent routed | `percent_routed` | scalar | Percentage of flow routed |
+| Initial infiltration | `initial_infiltration` | scalar | Horton/GA initial rate |
+| Limiting infiltration | `limiting_infiltration` | scalar | Horton/GA limiting rate |
+| Decay factor | `decay_factor` | scalar | Horton decay constant |
+| Initial abstraction factor | `initial_abstraction_factor` | scalar |  |
+| Drying time | `drying_time` | scalar | Horton drying time |
+| Maximum infiltration volume | `max_infiltration_volume` | scalar | Volume limit for Horton method |
 | Aquifer ID | `aquifer_id` | scalar | Linked aquifer |
-| Aquifer Node ID | `aquifer_node_id` | scalar | Groundwater discharge node |
-| Aquifer Elevation | `aquifer_elevation` | scalar | Aquifer/GW reference elevation |
-| Aquifer Initial Groundwater | `aquifer_initial_groundwater` | scalar | Initial GW level |
-| Aquifer Initial Moisture | `aquifer_initial_moisture_content` | scalar | Initial unsaturated zone moisture |
-| Elevation | `elevation` | scalar | surface elevation |
-| Groundwater Coefficient | `groundwater_coefficient` | scalar | Lateral GW flow coefficient |
-| Groundwater Exponent | `groundwater_exponent` | scalar | Lateral GW flow exponent |
-| Groundwater Threshold | `groundwater_threshold` | scalar | GW flow threshold depth |
-| Lateral GWF Equation | `lateral_gwf_equation` | scalar |  |
-| Deep GWF Equation | `deep_gwf_equation` | scalar |  |
-| Surface Coefficient | `surface_coefficient` | scalar | Surface GW flow coefficient |
-| Surface Depth | `surface_depth` | scalar |  |
-| Surface Exponent | `surface_exponent` | scalar |  |
-| Surface GW Coefficient | `surface_groundwater_coefficient` | scalar |  |
-| Area Average Rain | `area_average_rain` | scalar |  |
-| X Coordinate | `x` | scalar |  |
-| Y Coordinate | `y` | scalar |  (note: capital X in results scripts, lowercase y) |
-| N Perv Pattern | `n_perv_pattern` | scalar | time-varying roughness |
-| D-Store Pattern | `dstore_pattern` | scalar |  |
-| Infiltration Pattern | `infil_pattern` | scalar |  |
-| Coverages | `coverages` | blob | Sub-fields: `.land_use`, `.area` |
-| Loadings | `loadings` | blob | Sub-fields: `.pollutant`, `.build_up` |
-| Soil | `soil` | blob | Sub-fields: `.soil`, `.area` |
+| Aquifer node ID | `aquifer_node_id` | scalar | Groundwater discharge node |
+| Aquifer elevation | `aquifer_elevation` | scalar | Aquifer/GW reference elevation |
+| Aquifer Initial ground water elevation | `aquifer_initial_groundwater` | scalar | Initial GW level |
+| Aquifer Initial ground water moisture content | `aquifer_initial_moisture_content` | scalar | Initial unsaturated zone moisture |
+| Elevation | `elevation` | scalar | Surface elevation |
+| Groundwater coefficient | `groundwater_coefficient` | scalar | Lateral GW flow coefficient |
+| Groundwater exponent | `groundwater_exponent` | scalar | Lateral GW flow exponent |
+| Groundwater threshold | `groundwater_threshold` | scalar | GW flow threshold depth |
+| Initial moisture deficit | `initial_moisture_deficit` | scalar | Green-Ampt initial moisture deficit |
+| Lateral groundwater flow equation | `lateral_gwf_equation` | scalar |  |
+| Deep groundwater flow equation | `deep_gwf_equation` | scalar |  |
+| Surface coefficient | `surface_coefficient` | scalar | Surface GW flow coefficient |
+| Surface depth | `surface_depth` | scalar |  |
+| Surface exponent | `surface_exponent` | scalar |  |
+| Surface groundwater coefficient | `surface_groundwater_coefficient` | scalar |  |
+| Curve number | `curve_number` | scalar | CN method curve number |
+| Average capillary suction | `average_capillary_suction` | scalar | Green-Ampt suction head |
+| Saturated hydraulic conductivity | `saturated_hydraulic_conductivity` | scalar | Green-Ampt saturated K |
+| Initial abstraction type | `initial_abstraction_type` | scalar |  |
+| Runoff model type | `runoff_model_type` | scalar | 'SWMM', 'SCS_curvilinear', 'SCS_triangular' |
+| Shape factor | `shape_factor` | scalar |  |
+| Initial abstraction | `initial_abstraction` | scalar |  |
+| Time of concentration | `time_of_concentration` | scalar |  |
+| Snow pack ID | `snow_pack_id` | scalar | Linked snow pack |
+| Curb length | `curb_length` | scalar | Gutter/curb length for inlet capture |
+| LID controls | `suds_controls` | blob | Nested placement rows on subcatchment; sub-fields `suds_controls.*` (catalog fields are `sw_suds_control` below) |
+| Pervious surface roughness pattern | `n_perv_pattern` | scalar | Time-varying roughness |
+| Depression storage pattern | `dstore_pattern` | scalar |  |
+| Infiltration capacity pattern | `infil_pattern` | scalar |  |
 
-> Common data fields (`user_text_1`–`10`, `user_number_1`–`10`, `notes`, `hyperlinks`) apply to this object — see `Schema_Common.md`.
-
-#### Subcatchment LID / SuDS Controls (`sw_suds_control`)
+#### LID control (`sw_suds_control`)
 
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
-| Unit Surface Width | `suds_controls.unit_surface_width` | blob | SWMM SuDS/LID nested field |
-| Area | `suds_controls.area` | blob | SWMM SuDS/LID nested field |
-| Area % of Subcatchment | `suds_controls.area_subcatchment_pct` | blob | SWMM SuDS/LID nested field |
-| Control Type | `suds_controls.control_type` | blob | SWMM SuDS/LID nested field |
-| Drain To Node | `suds_controls.drain_to_node` | blob | SWMM SuDS/LID nested field |
-| Drain To Subcatchment | `suds_controls.drain_to_subcatchment` | blob | SWMM SuDS/LID nested field |
-| SuDS Control ID | `suds_controls.id` | blob | SWMM SuDS/LID nested field |
-| Impervious Area Treated % | `suds_controls.impervious_area_treated_pct` | blob | SWMM SuDS/LID nested field |
-| Initial Saturation % | `suds_controls.initial_saturation_pct` | blob | SWMM SuDS/LID nested field |
-| Number of Units | `suds_controls.num_units` | blob | SWMM SuDS/LID nested field |
-| Outflow To | `suds_controls.outflow_to` | blob | SWMM SuDS/LID nested field |
-| Pervious Area Treated % | `suds_controls.pervious_area_treated_pct` | blob | SWMM SuDS/LID nested field |
-| SuDS Structure | `suds_controls.suds_structure` | blob | SWMM SuDS/LID nested field |
-| Surface | `suds_controls.surface` | blob | SWMM SuDS/LID nested field |
+| Control ID | `control_id` | scalar | |
+| Control type | `control_type` | scalar | 'Bio-retention cell', 'Rain garden', 'Green roof', 'Infiltration trench', 'Permeable pavement', 'Rain barrel', 'Rooftop disconnection', 'Vegetative swale' |
+| Berm height | `surf_berm_height` | scalar | Surface layer |
+| Storage depth | `surf_storage_depth` | scalar | Surface layer |
+| Vegetation volume fraction | `surf_veg_vol_fraction` | scalar | Surface layer |
+| Surface roughness (Manning's n) | `surf_roughness_n` | scalar | Surface layer |
+| Surface slope | `surf_slope` | scalar | Surface layer |
+| Swale side slope (run/rise) | `surf_xslope` | scalar | Surface layer |
+| Pavement thickness | `pave_thickness` | scalar | Pavement layer |
+| Pavement void ratio | `pave_void_ratio` | scalar | Pavement layer |
+| Impervious surface fraction | `pave_impervious_surf_fraction` | scalar | Pavement layer |
+| Permeability | `pave_permeability` | scalar | Pavement layer |
+| Pavement clogging factor | `pave_clogging_factor` | scalar | Pavement layer |
+| Regeneration interval | `pave_regen_interval` | scalar | Pavement layer |
+| Regeneration fraction | `pave_regen_fraction` | scalar | Pavement layer |
+| Soil class | `soil_class` | scalar | 'Sand', 'Loamy sand', 'Sandy loam', 'Loam', 'Silt loam', 'Sandy clay loam', 'Clay loam', 'Silty clay loam', 'Sandy clay', 'Silty clay', 'Clay' |
+| Soil thickness | `soil_thickness` | scalar | Soil layer |
+| Soil porosity | `soil_porosity` | scalar | Soil layer |
+| Field capacity | `soil_field_capacity` | scalar | Soil layer |
+| Wilting point | `soil_wilting_point` | scalar | Soil layer |
+| Conductivity | `soil_conductivity` | scalar | Soil layer |
+| Conductivity slope | `soil_conductivity_slope` | scalar | Soil layer |
+| Suction head | `soil_suction_head` | scalar | Soil layer |
+| Barrel height | `storage_barrel_height` | scalar | Storage layer |
+| Storage thickness | `storage_thickness` | scalar | Storage layer |
+| Storage void ratio | `storage_void_ratio` | scalar | Storage layer |
+| Seepage rate | `storage_seepage_rate` | scalar | Storage layer |
+| Storage clogging factor | `storage_clogging_factor` | scalar | Storage layer |
+| Coefficient for flow in flow units | `underdrain_flow_coefficient` | scalar | Underdrain |
+| Flow exponent | `underdrain_flow_exponent` | scalar | Underdrain |
+| Offset height | `underdrain_offset_height` | scalar | Underdrain |
+| Delay | `underdrain_delay` | scalar | Underdrain |
+| Flow capacity | `underdrain_flow_capacity` | scalar | Underdrain |
+| Underdrain close depth | `underdrain_close_depth` | scalar | Underdrain |
+| Underdrain open depth | `underdrain_open_depth` | scalar | Underdrain |
+| Underdrain control curve | `underdrain_control_curve` | scalar | Underdrain |
+| Underdrain pollutant removal | `underdrain_poll_removal` | blob | WSStructure |
+| Mat thickness | `drainagemat_thickness` | scalar | Drainage mat |
+| Mat void fraction | `drainagemat_void_fraction` | scalar | Drainage mat |
+| Mat roughness (Manning's n) | `drainagemat_roughness` | scalar | Drainage mat |
 
 #### Land Use (`sw_land_use`)
 
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
-| ID | `id` | scalar | SWMM land use identifier |
-| Build Up Pollutant | `build_up.pollutant` | blob | Build-up blob field |
-| Build Up Type | `build_up.build_up_type` | blob | Build-up blob field |
-| Build Up Max Build Up | `build_up.max_build_up` | blob | Build-up blob field |
-| Build Up Power Rate Constant | `build_up.power_rate_constant` | blob | Build-up blob field |
-| Build Up Power Time Exponent | `build_up.power_time_exponent` | blob | Build-up blob field |
-| Build Up Exp Rate Constant | `build_up.exp_rate_constant` | blob | Build-up blob field |
-| Build Up Saturation Constant | `build_up.saturation_constant` | blob | Build-up blob field |
-| Build Up Unit | `build_up.unit` | blob | Build-up blob field |
-| Sweep Interval | `sweep_interval` | scalar | Surface management field |
-| Sweep Removal | `sweep_removal` | scalar | Surface management field |
-| Last Sweep | `last_sweep` | scalar | Surface management field |
+| Land use ID | `id` | scalar | SWMM land use identifier |
+| Build-up | `build_up` | blob | Sub-fields: `build_up.pollutant`, `build_up.build_up_type`, `build_up.max_build_up`, `build_up.power_rate_constant`, `build_up.power_time_exponent`, `build_up.exp_rate_constant`, `build_up.saturation_constant`, `build_up.unit` |
+| Washoff | `washoff` | blob | Sub-fields: `washoff.pollutant`, `washoff.washoff_type`, `washoff.exponential_washoff_coeff`, `washoff.rating_washoff_coeff`, `washoff.emc_washoff_coeff`, `washoff.washoff_exponent`, `washoff.sweep_removal`, `washoff.bmp_removal` |
+| Sweep interval | `sweep_interval` | scalar | Street sweeping interval (days) |
+| Sweep availability | `sweep_removal` | scalar | Fraction available after sweeping |
+| Last swept | `last_sweep` | scalar | Days since last swept |
 
 #### Pollutant (`sw_pollutant`)
 
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
-| ID | `id` | scalar | Pollutant identifier |
-| Units | `units` | scalar | Pollutant units |
-| Rainfall Concentration | `rainfall_conc` | scalar | Concentration field |
-| Groundwater Concentration | `groundwater_conc` | scalar | Concentration field |
-| RDII Concentration | `rdii_conc` | scalar | Concentration field |
-| Dry Weather Flow Concentration | `dwf_conc` | scalar | Concentration field |
-| Initial Concentration | `init_conc` | scalar | Initial condition |
-| Decay Coefficient | `decay_coeff` | scalar | Decay field |
-| Snow Build Up | `snow_build_up` | scalar | Snow field |
-| Co-Pollutant | `co-pollutant` | scalar | Co-pollutant name field |
-| Co-Fraction | `co-fraction` | scalar | Co-pollutant fraction field |
+| Name | `id` | scalar | Pollutant identifier |
+| Units | `units` | scalar | 'mg/l', 'ug/l', '#/l' |
+| Rainfall concentration | `rainfall_conc` | scalar | Concentration field |
+| Groundwater concentration | `groundwater_conc` | scalar | Concentration field |
+| I&I concentration | `rdii_conc` | scalar | Concentration field |
+| DWF concentration | `dwf_conc` | scalar | Concentration field |
+| Initial concentration | `init_conc` | scalar | Initial condition |
+| Decay coefficient | `decay_coeff` | scalar | Decay field |
+| Snow only | `snow_build_up` | scalar | Snow field |
+| Co-pollutant | `co-pollutant` | scalar | Co-pollutant name field |
+| Co-fraction | `co-fraction` | scalar | Co-pollutant fraction field |
 
 #### Snow Pack (`sw_snow_pack`)
 
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
-| ID | `id` | scalar | SWMM snow pack identifier |
-| Plow Minimum Melt | `plow_min_melt` | scalar | Melt parameter |
-| Impervious Minimum Melt | `imp_min_melt` | scalar | Melt parameter |
-| Pervious Minimum Melt | `perv_min_melt` | scalar | Melt parameter |
-| Plow Maximum Melt | `plow_max_melt` | scalar | Melt parameter |
-| Impervious Maximum Melt | `imp_max_melt` | scalar | Melt parameter |
-| Pervious Maximum Melt | `perv_max_melt` | scalar | Melt parameter |
-| Plow Base Temperature | `plow_base_temp` | scalar | Temperature field |
-| Impervious Base Temperature | `imp_base_temp` | scalar | Temperature field |
-| Pervious Base Temperature | `perv_base_temp` | scalar | Temperature field |
-| Fraction Plowable | `fraction_plowable` | scalar | Routing field |
-| To Impervious | `to_impervious` | scalar | Routing fraction |
-| To Pervious | `to_pervious` | scalar | Routing fraction |
-| To Immediate Melt | `to_immediate_melt` | scalar | Routing fraction |
-| To Subcatchment | `to_subcatchment` | scalar | Routing fraction |
+| Snow pack ID | `id` | scalar | SWMM snow pack identifier |
+| Plowable min. melt coefficient | `plow_min_melt` | scalar | Melt parameter |
+| Plowable max. melt coefficient | `plow_max_melt` | scalar | Melt parameter |
+| Plowable base temperature | `plow_base_temp` | scalar | Temperature field |
+| Plowable fraction free water capacity | `plow_free_water` | scalar | Water content parameter |
+| Plowable initial snow depth | `plow_snow_depth` | scalar | Snow depth field |
+| Plowable initial free water | `plow_initial_free_water` | scalar | Water content parameter |
+| Fraction of impervious area plowable | `fraction_plowable` | scalar | Routing field |
+| Impervious min. melt coefficient | `imp_min_melt` | scalar | Melt parameter |
+| Impervious max. melt coefficient | `imp_max_melt` | scalar | Melt parameter |
+| Impervious base temperature | `imp_base_temp` | scalar | Temperature field |
+| Impervious fraction free water capacity | `imp_free_water` | scalar | Water content parameter |
+| Impervious initial snow depth | `imp_snow_depth` | scalar | Snow depth field |
+| Impervious initial free water | `imp_initial_free_water` | scalar | Water content parameter |
+| Impervious depth at 100% cover | `imp_100_cover` | scalar | Snow depth field |
+| Pervious min. melt coefficient | `perv_min_melt` | scalar | Melt parameter |
+| Pervious max. melt coefficient | `perv_max_melt` | scalar | Melt parameter |
+| Pervious base temperature | `perv_base_temp` | scalar | Temperature field |
+| Pervious fraction free water capacity | `perv_free_water` | scalar | Water content parameter |
+| Pervious initial snow depth | `perv_snow_depth` | scalar | Snow depth field |
+| Pervious initial free water | `perv_initial_free_water` | scalar | Water content parameter |
+| Pervious depth at 100% cover | `perv_100_cover` | scalar | Snow depth field |
+| Depth at which snow removal begins | `plow_depth` | scalar | Snow depth/routing field |
+| Fraction transferred out of the catchment | `out_of_watershed` | scalar | Routing field |
+| Fraction transferred to the impervious area | `to_impervious` | scalar | Routing fraction |
+| Fraction transferred to the pervious area | `to_pervious` | scalar | Routing fraction |
+| Fraction converted into immediate melt | `to_immediate_melt` | scalar | Routing fraction |
+| Fraction moved to another subcatchment | `to_subcatchment` | scalar | Routing fraction |
 | Subcatchment ID | `subcatchment_id` | scalar | Linked subcatchment |
-| Plow Free Water | `plow_free_water` | scalar | Water content parameter |
-| Impervious Free Water | `imp_free_water` | scalar | Water content parameter |
-| Pervious Free Water | `perv_free_water` | scalar | Water content parameter |
-| Plow Snow Depth | `plow_snow_depth` | scalar | Snow depth field |
-| Impervious Snow Depth | `imp_snow_depth` | scalar | Snow depth field |
-| Pervious Snow Depth | `perv_snow_depth` | scalar | Snow depth field |
-| Plow Depth | `plow_depth` | scalar | Snow depth/routing field |
-| Out of Watershed | `out_of_watershed` | scalar | Routing field |
 
 #### Underdrain Curve (`sw_curve_underdrain`)
 
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
-| ID | `id` | scalar | Underdrain curve identifier |
-| Depth | `data.depth` | blob | Curve data field |
-| Factor | `data.factor` | blob | Curve data field |
+| Curve ID | `id` | scalar | Underdrain curve identifier |
+| Underdrain array | `data` | blob | Sub-fields: `data.depth`, `data.factor` |
 
 #### Aquifer (`sw_aquifer`)
 
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
-| ID | `id` | scalar | Aquifer identifier |
-| Soil Porosity | `soil_porosity` | scalar | Soil property |
-| Soil Wilting Point | `soil_wilting_point` | scalar | Soil property |
-| Soil Field Capacity | `soil_field_capacity` | scalar | Soil property |
+| Aquifer ID | `id` | scalar | Aquifer identifier |
+| Soil porosity | `soil_porosity` | scalar | Soil property |
+| Soil wilting point | `soil_wilting_point` | scalar | Soil property |
+| Soil field capacity | `soil_field_capacity` | scalar | Soil property |
 | Conductivity | `conductivity` | scalar | Aquifer property |
-| Conductivity Slope | `conductivity_slope` | scalar | Aquifer property |
-| Tension Slope | `tension_slope` | scalar | Aquifer property |
-| Evapotranspiration Fraction | `evapotranspiration_fraction` | scalar | ET property |
-| Evapotranspiration Depth | `evapotranspiration_depth` | scalar | ET property |
-| Seepage Rate | `seepage_rate` | scalar | Aquifer property |
+| Conductivity slope | `conductivity_slope` | scalar | Aquifer property |
+| Tension slope | `tension_slope` | scalar | Aquifer property |
+| Evapotranspiration fraction | `evapotranspiration_fraction` | scalar | ET property |
+| Evapotranspiration depth | `evapotranspiration_depth` | scalar | ET property |
+| Seepage rate | `seepage_rate` | scalar | Aquifer property |
 | Elevation | `elevation` | scalar | Elevation field |
-| Initial Groundwater | `initial_groundwater` | scalar | Initial condition |
-| Initial Moisture Content | `initial_moisture_content` | scalar | Initial condition |
-| Time Pattern ID | `time_pattern_id` | scalar | Linked time pattern |
+| Initial groundwater | `initial_groundwater` | scalar | Initial condition |
+| Initial moisture content | `initial_moisture_content` | scalar | Initial condition |
+| Time pattern ID | `time_pattern_id` | scalar | Linked time pattern |
 
 #### Soil (`sw_soil`)
 
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
-| ID | `id` | scalar | Soil identifier |
-| Initial Infiltration | `initial_infiltration` | scalar | Infiltration field |
-| Limiting Infiltration | `limiting_infiltration` | scalar | Infiltration field |
-| Decay Factor | `decay_factor` | scalar | Infiltration decay |
-| Drying Time | `drying_time` | scalar | Infiltration drying |
-| Max Infiltration Volume | `max_infiltration_volume` | scalar | Infiltration volume limit |
-| Initial Moisture Deficit | `initial_moisture_deficit` | scalar | Green-Ampt field |
-| Curve Number | `curve_number` | scalar | CN infiltration field |
-| Average Capillary Suction | `average_capillary_suction` | scalar | Green-Ampt field |
-| Saturated Hydraulic Conductivity | `saturated_hydraulic_conductivity` | scalar | Green-Ampt field |
+| Soil ID | `id` | scalar | Soil identifier |
+| Initial infiltration | `initial_infiltration` | scalar | Horton field |
+| Limiting infiltration | `limiting_infiltration` | scalar | Horton field |
+| Decay factor | `decay_factor` | scalar | Horton field |
+| Drying time | `drying_time` | scalar | Infiltration drying |
+| Maximum infiltration volume | `max_infiltration_volume` | scalar | Horton field |
+| Initial moisture deficit | `initial_moisture_deficit` | scalar | Green-Ampt field |
+| Curve number | `curve_number` | scalar | CN field |
+| Average capillary suction | `average_capillary_suction` | scalar | Green-Ampt field |
+| Saturated hydraulic conductivity | `saturated_hydraulic_conductivity` | scalar | Green-Ampt field |
 
 ### Polygons and 2D Objects
 
-#### Polygon, TVD, and Spatial Rain (`sw_polygon`, `sw_tvd_connector`, `sw_spatial_rain_zone`, `sw_spatial_rain_source`)
+#### Polygon (`sw_polygon`)
 
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
-| Polygon ID | `polygon_id` | scalar | Use with `sw_polygon` |
-| Polygon Category ID | `category_id` | scalar | Category field |
-| Polygon Area | `area` | scalar | Polygon area |
-| Polygon Boundary | `boundary_array` | blob | Polygon geometry |
-| TVD Connector ID | `id` | scalar | Use with `sw_tvd_connector` |
-| Input A | `input_a` | scalar | Expression input |
-| Input B | `input_b` | scalar | Expression input |
-| Input C | `input_c` | scalar | Expression input |
-| Output Expression | `output_expression` | scalar | Expression text |
-| Connected Object ID | `connected_object_id` | scalar | Link target ID |
-| Spatial Rain Source Type | `source_type` | scalar | Use with `sw_spatial_rain_source` |
-| Spatial Rain Source Start Time | `start_time` | scalar | Temporal field |
-| Spatial Rain Source End Time | `end_time` | scalar | Temporal field |
+| ID | `polygon_id` | scalar | |
+| Category | `category_id` | scalar | |
+| Area | `area` | scalar | |
 
-#### 2D Zone, Roughness, and Mesh Support (`sw_2d_zone`, `sw_roughness_zone`, `sw_roughness_definition`, `sw_mesh_zone`, `sw_mesh_level_zone`)
+#### TVD connector (`sw_tvd_connector`)
 
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
-| 2D Zone ID | `zone_id` | scalar | Use with `sw_2d_zone` |
-| 2D Zone Max Triangle Area | `max_triangle_area` | scalar | Mesh control field |
-| 2D Zone Min Mesh Element Area | `min_mesh_element_area` | scalar | Mesh control field |
-| 2D Zone Roughness | `roughness` | scalar | 2D roughness value |
-| 2D Zone Roughness Definition ID | `roughness_definition_id` | scalar | Links to `sw_roughness_definition` |
-| Roughness Zone Exclude From 2D Mesh | `exclude_from_2d_mesh` | scalar | Use with `sw_roughness_zone` |
-| Roughness Zone Priority | `priority` | scalar | Override priority |
-| Roughness Definition ID | `definition_id` | scalar | Use with `sw_roughness_definition` |
-| Roughness Definition Bands | `number_of_bands` | scalar | Band count |
-| Mesh Zone Polygon ID | `polygon_id` | scalar | Use with `sw_mesh_zone` |
-| Mesh Zone Min Mesh Element Area | `min_mesh_element_area` | scalar | Mesh control field |
-| Mesh Level Type | `level_type` | scalar | Use with `sw_mesh_level_zone` |
-| Mesh Upper Limit Level | `upper_limit_level` | scalar | Level cap |
-| Mesh Lower Limit Level | `lower_limit_level` | scalar | Level floor |
-| Mesh Level Section Elevation | `level_sections.elevation` | blob | Nested mesh-level section field |
+| ID | `id` | scalar | |
+| Category | `category_id` | scalar | |
+| Input A units type | `input_a_units` | scalar | |
+| Input A | `input_a` | scalar | |
+| Input B units type | `input_b_units` | scalar | |
+| Input B | `input_b` | scalar | |
+| Input C units type | `input_c_units` | scalar | |
+| Input C | `input_c` | scalar | |
+| Output units type | `output_units` | scalar | |
+| Connector units | `expression_units` | scalar | |
+| Output expression | `output_expression` | scalar | |
+| Resampling buffer (mins) | `resampling_buffer` | scalar | |
+| Connected object type | `connected_object_type` | scalar | |
+| Connected object id | `connected_object_id` | scalar | |
+| Connection usage | `usage` | scalar | |
+| Input attribute | `input_attribute` | scalar | |
+| Comparison result | `comparison_result` | scalar | |
+| Area | `area` | scalar | |
+| X coord | `x` | scalar | |
+| Y coord | `y` | scalar | |
 
-#### Porous Polygon (`sw_porous_polygon`)
+#### Spatial rain zone (`sw_spatial_rain_zone`)
 
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
-| Porosity | `porosity` | scalar | Polygon porosity |
-| Crest Level | `crest_level` | scalar | Structure elevation |
-| No Rainfall | `no_rainfall` | scalar | Rainfall exclusion flag |
+| ID | `id` | scalar | |
+| Area | `area` | scalar | |
+
+#### Spatial rain source (`sw_spatial_rain_source`)
+
+| UI Label | Database Field | Type | Notes |
+|----------|----------------|------|-------|
+| ID | `id` | scalar | |
+| Source type | `source_type` | scalar | |
+| Stream name or category | `stream_or_category` | scalar | |
+| Priority | `priority` | scalar | |
+| Start seconds relative to origin | `start_time` | scalar | |
+| End seconds relative to origin | `end_time` | scalar | |
+
+#### 2D zone (`sw_2d_zone`)
+
+| UI Label | Database Field | Type | Notes |
+|----------|----------------|------|-------|
+| ID | `zone_id` | scalar | |
+| Boundary type | `boundary_type` | scalar | |
+| Area | `area` | scalar | |
+| Maximum triangle area | `max_triangle_area` | scalar | |
+| Minimum element area | `min_mesh_element_area` | scalar | |
+| Maximum height variation | `max_height_variation` | scalar | |
+| Mesh generation | `mesh_generation` | scalar | |
+| Terrain-sensitive meshing | `terrain_sensitive_mesh` | scalar | |
+| Minimum angle | `minimum_angle` | scalar | |
+| Roughness (Manning's n) | `roughness` | scalar | |
+| Roughness definition | `roughness_definition_id` | scalar | Links to `sw_roughness_definition` |
+| Apply rainfall etc directly to mesh elements | `apply_rainfall_directly` | scalar | |
+| Apply rainfall etc | `apply_rainfall_subcatch` | scalar | |
+| Rainfall profile | `rainfall_profile` | scalar | |
+| Rainfall percentage | `rainfall_percentage` | scalar | |
+| Mesh summary | `mesh_summary` | scalar | |
+
+#### Roughness zone (`sw_roughness_zone`)
+
+| UI Label | Database Field | Type | Notes |
+|----------|----------------|------|-------|
+| ID | `polygon_id` | scalar | |
+| Area | `area` | scalar | |
+| Exclude roughness zone boundary when creating 2D mesh | `exclude_from_2d_mesh` | scalar | |
+| Roughness (Manning's n) | `roughness` | scalar | |
+| Roughness definition | `roughness_definition_id` | scalar | Links to `sw_roughness_definition` |
+| Priority | `priority` | scalar | |
+
+#### Roughness definition (`sw_roughness_definition`)
+
+| UI Label | Database Field | Type | Notes |
+|----------|----------------|------|-------|
+| ID | `definition_id` | scalar | |
+| Number of depth bands | `number_of_bands` | scalar | |
+| Roughness 1 (Manning's n) | `roughness_1` | scalar | |
+| Depth threshold 1 | `depth_thld_1` | scalar | |
+| Roughness 2 (Manning's n) | `roughness_2` | scalar | |
+| Depth threshold 2 | `depth_thld_2` | scalar | |
+| Roughness 3 (Manning's n) | `roughness_3` | scalar | |
+
+#### Mesh zone (`sw_mesh_zone`)
+
+| UI Label | Database Field | Type | Notes |
+|----------|----------------|------|-------|
+| ID | `polygon_id` | scalar | |
+| Area | `area` | scalar | |
+| Maximum triangle area | `max_triangle_area` | scalar | |
+| Override 2D zone minimum element area setting | `apply_min_elt_size` | scalar | |
+| Minimum element area | `min_mesh_element_area` | scalar | |
+
+#### Mesh level zone (`sw_mesh_level_zone`)
+
+| UI Label | Database Field | Type | Notes |
+|----------|----------------|------|-------|
+| ID | `polygon_id` | scalar | |
+| Area | `area` | scalar | |
+| Type | `level_type` | scalar | |
+| Use upper limit | `use_upper_limit` | scalar | |
+| Upper limit level | `upper_limit_level` | scalar | |
+| Use lower limit | `use_lower_limit` | scalar | |
+| Lower limit level | `lower_limit_level` | scalar | |
+| Vertices | `level_sections` | blob | Sub-fields: `level_sections.elevation` |
+| Level | `level` | scalar | |
+| Raise by | `raise_by` | scalar | |
+
+#### Porous polygon (`sw_porous_polygon`)
+
+| UI Label | Database Field | Type | Notes |
+|----------|----------------|------|-------|
+| Porous polygon | `polygon_id` | scalar | |
+| Asset ID | `asset_id` | scalar | |
+| Porosity | `porosity` | scalar | |
+| Crest level | `crest_level` | scalar | |
+| Height | `height` | scalar | |
+| Level | `level` | scalar | |
+| Remove wall during simulation | `remove_wall` | scalar | |
+| Wall removal trigger | `wall_removal_trigger` | scalar | |
+| Use difference across wall | `use_diff_across_wall` | scalar | |
+| Depth threshold | `depth_threshold` | scalar | |
+| Elevation threshold | `elevation_threshold` | scalar | |
+| Velocity threshold | `velocity_threshold` | scalar | |
+| Unit flow threshold | `unit_flow_threshold` | scalar | |
+| Total head threshold | `total_head_threshold` | scalar | |
+| Force threshold | `force_threshold` | scalar | |
+| Hydrostatic pressure coefficient | `hydro_press_coeff` | scalar | |
+| No rainfall | `no_rainfall` | scalar | |
+| Area | `area` | scalar | |
 
 ### Lines
 
-#### General Line, Porous Wall, 2D Boundary, and Head Unit Flow (`sw_general_line`, `sw_porous_wall`, `sw_2d_boundary_line`, `sw_head_unit_discharge`)
+#### General line (`sw_general_line`)
 
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
-| General Line ID | `line_id` | scalar | Use with `sw_general_line` |
-| General Line Category | `category` | scalar | Classification field |
-| General Line Length | `length` | scalar | Line length |
-| Porous Wall Wall Removal Trigger | `wall_removal_trigger` | scalar | Use with `sw_porous_wall` |
-| Porous Wall Porosity | `porosity` | scalar | Porosity field |
-| Porous Wall Depth Threshold | `depth_threshold` | scalar | Trigger threshold |
-| 2D Boundary Line Type | `line_type` | scalar | Use with `sw_2d_boundary_line` |
-| 2D Boundary Head Unit Discharge ID | `head_unit_discharge_id` | scalar | Linked flow table |
-| Head Unit Discharge Description | `head_unit_discharge_description` | scalar | Use with `sw_head_unit_discharge` |
-| Head Unit Discharge Head | `HUDP_table.head` | blob | Nested table field |
-| Head Unit Discharge Value | `HUDP_table.unit_discharge` | blob | Nested table field |
+| General line | `line_id` | scalar | |
+| Asset ID | `asset_id` | scalar | |
+| Category | `category` | scalar | |
+| Length | `length` | scalar | |
+
+#### Porous wall (`sw_porous_wall`)
+
+| UI Label | Database Field | Type | Notes |
+|----------|----------------|------|-------|
+| Porous wall | `line_id` | scalar | |
+| Asset ID | `asset_id` | scalar | |
+| Porosity | `porosity` | scalar | |
+| Crest level | `crest_level` | scalar | |
+| Height | `height` | scalar | |
+| Level | `level` | scalar | |
+| Remove wall during simulation | `remove_wall` | scalar | |
+| Wall removal trigger | `wall_removal_trigger` | scalar | |
+| Use difference across wall | `use_diff_across_wall` | scalar | |
+| Depth threshold | `depth_threshold` | scalar | |
+| Elevation threshold | `elevation_threshold` | scalar | |
+| Velocity threshold | `velocity_threshold` | scalar | |
+| Unit flow threshold | `unit_flow_threshold` | scalar | |
+| Total head threshold | `total_head_threshold` | scalar | |
+| Force threshold | `force_threshold` | scalar | |
+| Hydrostatic pressure coefficient | `hydro_press_coeff` | scalar | |
+| Length | `length` | scalar | |
+
+#### 2D boundary (`sw_2d_boundary_line`)
+
+| UI Label | Database Field | Type | Notes |
+|----------|----------------|------|-------|
+| Name | `line_id` | scalar | |
+| Boundary line type | `line_type` | scalar | UI: Vertical wall, Critical depth, Supercritical, Dry, Normal depth, Inflow, Level, Level & head/discharge |
+| Bed load boundary type | `bed_load_boundary` | scalar | |
+| Suspended load boundary type | `suspended_load_boundary` | scalar | |
+| Head unit flow table | `head_unit_discharge_id` | scalar | |
+| Length | `length` | scalar | |
+
+#### Head unit flow (`sw_head_unit_discharge`)
+
+| UI Label | Database Field | Type | Notes |
+|----------|----------------|------|-------|
+| Head unit flow ID | `head_unit_discharge_id` | scalar | |
+| Description | `head_unit_discharge_description` | scalar | |
+| Head unit flow table | `HUDP_table` | blob | Sub-fields: `HUDP_table.head`, `HUDP_table.unit_discharge` |
 
 ### Points
 
@@ -673,10 +825,11 @@ All SWMM field tables are indexed here. For common fields (`user_text_*`, `user_
 
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
-| Rain Gage ID | `raingage_id` | scalar | Rain gage identifier |
-| X Coordinate | `x` | scalar | Geometry field |
-| Y Coordinate | `y` | scalar | Geometry field |
-| SCF | `scf` | scalar | Scale factor field |
+| Rain gage ID | `raingage_id` | scalar | Rain gage identifier |
+| x | `x` | scalar | Geometry field |
+| y | `y` | scalar | Geometry field |
+| Rainfall profile | `rainfall_profile` | scalar | Linked rainfall profile |
+| Snow catch factor | `scf` | scalar | |
 
 ---
 
