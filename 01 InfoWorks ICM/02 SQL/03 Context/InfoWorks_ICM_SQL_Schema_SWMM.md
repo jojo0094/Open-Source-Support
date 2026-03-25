@@ -238,8 +238,6 @@ All SWMM field tables are indexed here. For common fields (`user_text_*`, `user_
 
 #### Conduit (`sw_conduit`)
 
-> **CORRECTION:** Previous schema incorrectly listed `geom1`/`geom2`/`barrels`/`xsec_type` as SWMM conduit fields. SWMM SQL scripts in this repository confirm `conduit_width`, `conduit_height`, `number_of_barrels`, and `shape` are the correct SQL field names.
-
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
 | Link ID | `id` | scalar | SWMM conduit identifier; InfoWorks uses `link_suffix` |
@@ -286,19 +284,12 @@ All SWMM field tables are indexed here. For common fields (`user_text_*`, `user_
 
 > Common data fields (`user_text_1`–`10`, `user_number_1`–`10`, `notes`, `hyperlinks`) apply to this object — see `Schema_Common.md`.
 
-#### Pump (`sw_pump`)
+#### Shape Curve (`sw_curve_shape`)
 
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
-| Link ID | `id` | scalar | SWMM object identifier |
-| Start node | `us_node_id` | scalar | Common link identifier |
-| End node | `ds_node_id` | scalar | Common link identifier |
-| Ideal pump | `ideal` | scalar | Ideal pump flag |
-| Pump curve ID | `pump_curve` | scalar | Linked pump curve |
-| Initial status | `initial_status` | scalar | SWMM control/status field |
-| Startup depth | `start_up_depth` | scalar | SWMM control depth |
-| Shutoff depth | `shut_off_depth` | scalar | SWMM control depth |
-| Branch ID | `branch_id` | scalar | Branch/control field |
+| Curve ID | `id` | scalar | Shape curve identifier |
+| Geometry | `data` | blob | Sub-fields: `data.normalized_depth`, `data.normalized_width` |
 
 #### Orifice (`sw_orifice`)
 
@@ -317,6 +308,65 @@ All SWMM field tables are indexed here. For common fields (`user_text_*`, `user_
 | Time to open | `time_to_open` | scalar | Control field |
 | Branch ID | `branch_id` | scalar | Branch/control field |
 
+#### Pump (`sw_pump`)
+
+| UI Label | Database Field | Type | Notes |
+|----------|----------------|------|-------|
+| Link ID | `id` | scalar | SWMM object identifier |
+| Start node | `us_node_id` | scalar | Common link identifier |
+| End node | `ds_node_id` | scalar | Common link identifier |
+| Ideal pump | `ideal` | scalar | Ideal pump flag |
+| Pump curve ID | `pump_curve` | scalar | Linked pump curve |
+| Initial status | `initial_status` | scalar | SWMM control/status field |
+| Startup depth | `start_up_depth` | scalar | SWMM control depth |
+| Shutoff depth | `shut_off_depth` | scalar | SWMM control depth |
+| Branch ID | `branch_id` | scalar | Branch/control field |
+
+#### Pump Curve (`sw_curve_pump`)
+
+| UI Label | Database Field | Type | Notes |
+|----------|----------------|------|-------|
+| Curve ID | `id` | scalar | Pump curve identifier |
+| Pump curve type | `type` | scalar | 'PUMP1', 'PUMP2', 'PUMP3', 'PUMP4' |
+| Inlet volume increment array | `pump1_data` | blob | PUMP1; sub-fields: `pump1_data.volume_increment`, `pump1_data.outflow` |
+| Inlet depth increment array | `pump2_data` | blob | PUMP2; sub-fields: `pump2_data.depth_increment`, `pump2_data.outflow` |
+| Head difference array | `pump3_data` | blob | PUMP3; sub-fields: `pump3_data.head_difference`, `pump3_data.outflow` |
+| Continuous depth array | `pump4_data` | blob | PUMP4; sub-fields: `pump4_data.continuous_depth`, `pump4_data.outflow` |
+
+#### Weir (`sw_weir`)
+
+| UI Label | Database Field | Type | Notes |
+|----------|----------------|------|-------|
+| Link ID | `id` | scalar | SWMM object identifier |
+| Start node | `us_node_id` | scalar | Common link identifier |
+| End node | `ds_node_id` | scalar | Common link identifier |
+| Weir type | `link_type` | scalar | 'Transverse', 'Sideflow', 'V-notch', 'Trapezoidal', 'Roadway' |
+| Crest height | `crest` | scalar | Weir crest level |
+| Roof height | `weir_height` | scalar | SWMM weir geometry |
+| Weir width | `weir_width` | scalar | SWMM weir geometry |
+| Left slope | `left_slope` | scalar | SWMM weir geometry |
+| Right slope | `right_slope` | scalar | SWMM weir geometry |
+| Variable discharge coefficient | `var_dis_coeff` | scalar | SWMM weir option |
+| Discharge coefficient | `discharge_coeff` | scalar | Hydraulic parameter |
+| Sideflow discharge coefficient | `sideflow_discharge_coeff` | scalar | Hydraulic parameter |
+| Weir curve ID | `weir_curve` | scalar | Link to `sw_curve_weir` |
+| Flap gate | `flap_gate` | scalar | SWMM weir option |
+| Number of end contractions | `end_contractions` | scalar | SWMM weir option |
+| Trapezoidal discharge coefficient | `secondary_discharge_coeff` | scalar | Hydraulic parameter |
+| Allows surcharge | `allows_surcharge` | scalar | SWMM weir option |
+| Roadway width | `width` | scalar | Additional width field |
+| Roadway surface | `surface` | scalar | SWMM surface selector |
+| Branch ID | `branch_id` | scalar | Branch/control field |
+
+#### Weir Curve (`sw_curve_weir`)
+
+| UI Label | Database Field | Type | Notes |
+|----------|----------------|------|-------|
+| Curve ID | `id` | scalar | Weir curve identifier |
+| Weir curve type | `type` | scalar | 'Weir', 'Sideflow' |
+| Weir array | `data` | blob | Sub-fields: `data.head`, `data.coefficient` |
+| Sideflow array | `sideflow_data` | blob | Sub-fields: `sideflow_data.head`, `sideflow_data.coefficient` |
+
 #### Outlet (`sw_outlet`)
 
 | UI Label | Database Field | Type | Notes |
@@ -332,96 +382,34 @@ All SWMM field tables are indexed here. For common fields (`user_text_*`, `user_
 | Exp of outlet function | `discharge_exponent` | scalar | Hydraulic parameter |
 | Branch ID | `branch_id` | scalar | Branch/control field |
 
-#### Weir (`sw_weir`)
+#### Rating Curve (`sw_curve_rating`)
 
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
-| ID | `id` | scalar | SWMM object identifier |
-| Upstream Node ID | `us_node_id` | scalar | Common link identifier |
-| Downstream Node ID | `ds_node_id` | scalar | Common link identifier |
-| Weir Type | `link_type` | scalar | Weir type |
-| Crest | `crest` | scalar | Weir crest level |
-| Weir Height | `weir_height` | scalar | SWMM weir geometry |
-| Weir Width | `weir_width` | scalar | SWMM weir geometry |
-| Left Slope | `left_slope` | scalar | SWMM weir geometry |
-| Right Slope | `right_slope` | scalar | SWMM weir geometry |
-| Variable Discharge Coefficient | `var_dis_coeff` | scalar | SWMM weir option |
-| Discharge Coefficient | `discharge_coeff` | scalar | Hydraulic parameter |
-| Sideflow Discharge Coefficient | `sideflow_discharge_coeff` | scalar | Hydraulic parameter |
-| Weir Curve | `weir_curve` | scalar | Link to `sw_curve_weir` |
-| Flap Gate | `flap_gate` | scalar | Control field |
-| End Contractions | `end_contractions` | scalar | SWMM weir option |
-| Secondary Discharge Coefficient | `secondary_discharge_coeff` | scalar | Hydraulic parameter |
-| Allows Surcharge | `allows_surcharge` | scalar | SWMM behavior option |
-| Width | `width` | scalar | Additional width field |
-| Surface | `surface` | scalar | SWMM surface selector |
-| Branch ID | `branch_id` | scalar | Branch/control field |
-
-#### Weir Curve (`sw_curve_weir`)
-
-| UI Label | Database Field | Type | Notes |
-|----------|----------------|------|-------|
-| ID | `id` | scalar | Weir curve identifier |
-| Data Head | `data.head` | blob | Curve row field |
-| Data Coefficient | `data.coefficient` | blob | Curve row field |
-| Sideflow Head | `sideflow_data.head` | blob | Sideflow curve row field |
-| Sideflow Coefficient | `sideflow_data.coefficient` | blob | Sideflow curve row field |
-| Type | `type` | scalar | Curve type selector |
+| Rating curve ID | `id` | scalar | Rating curve identifier |
+| Rating array | `data` | blob | Sub-fields: `data.head`, `data.outflow` |
 
 #### Transect (`sw_transect`)
 
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
-| ID | `id` | scalar | Transect identifier |
-| Left Roughness | `left_roughness` | scalar | Transect roughness field |
-| Right Roughness | `right_roughness` | scalar | Transect roughness field |
-| Channel Roughness | `channel_roughness` | scalar | Transect roughness field |
-| Left Offset | `left_offset` | scalar | Transect geometry field |
-| Right Offset | `right_offset` | scalar | Transect geometry field |
-| Width Factor | `width_factor` | scalar | Transect geometry field |
-| Elevation Adjust | `elevation_adjust` | scalar | Transect adjustment field |
-| Meander Factor | `meander_factor` | scalar | Transect adjustment field |
-| Profile X | `profile.x` | blob | Transect profile blob field |
-| Profile Z | `profile.z` | blob | Transect profile blob field |
+| Transect ID | `id` | scalar | Transect identifier |
+| Left bank roughness | `left_roughness` | scalar | Transect roughness field |
+| Right bank roughness | `right_roughness` | scalar | Transect roughness field |
+| Channel roughness | `channel_roughness` | scalar | Transect roughness field |
+| Left bank offset | `left_offset` | scalar | Transect geometry field |
+| Right bank offset | `right_offset` | scalar | Transect geometry field |
+| Stations factor | `width_factor` | scalar | Transect geometry field |
+| Elevation modifier | `elevation_adjust` | scalar | Transect adjustment field |
+| Meander factor | `meander_factor` | scalar | Transect adjustment field |
+| Profile | `profile` | blob | Sub-fields: `profile.x`, `profile.z` |
 
 #### Control Curve (`sw_curve_control`)
 
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
-| ID | `id` | scalar | Control curve identifier |
-| Variable | `data.variable` | blob | Curve data field |
-| Setting | `data.setting` | blob | Curve data field |
-
-#### Pump Curve (`sw_curve_pump`)
-
-| UI Label | Database Field | Type | Notes |
-|----------|----------------|------|-------|
-| ID | `id` | scalar | Pump curve identifier |
-| Pump 1 Volume Increment | `pump1_data.volume_increment` | blob | Pump-curve data field |
-| Pump 1 Outflow | `pump1_data.outflow` | blob | Pump-curve data field |
-| Pump 2 Depth Increment | `pump2_data.depth_increment` | blob | Pump-curve data field |
-| Pump 2 Outflow | `pump2_data.outflow` | blob | Pump-curve data field |
-| Pump 3 Head Difference | `pump3_data.head_difference` | blob | Pump-curve data field |
-| Pump 3 Outflow | `pump3_data.outflow` | blob | Pump-curve data field |
-| Pump 4 Continuous Depth | `pump4_data.continuous_depth` | blob | Pump-curve data field |
-| Pump 4 Outflow | `pump4_data.outflow` | blob | Pump-curve data field |
-| Type | `type` | scalar | Pump-curve type selector |
-
-#### Rating Curve (`sw_curve_rating`)
-
-| UI Label | Database Field | Type | Notes |
-|----------|----------------|------|-------|
-| ID | `id` | scalar | Rating curve identifier |
-| Head | `data.head` | blob | Curve data field |
-| Outflow | `data.outflow` | blob | Curve data field |
-
-#### Shape Curve (`sw_curve_shape`)
-
-| UI Label | Database Field | Type | Notes |
-|----------|----------------|------|-------|
-| ID | `id` | scalar | Shape curve identifier |
-| Normalized Depth | `data.normalized_depth` | blob | Curve data field |
-| Normalized Width | `data.normalized_width` | blob | Curve data field |
+| Curve ID | `id` | scalar | Control curve identifier |
+| Control array | `data` | blob | Sub-fields: `data.variable`, `data.setting` |
 
 ### Subcatchments
 
