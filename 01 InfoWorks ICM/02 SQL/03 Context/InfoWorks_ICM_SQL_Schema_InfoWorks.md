@@ -259,7 +259,7 @@ All InfoWorks field tables are indexed here. For common fields (`user_text_*`, `
 | Height | `conduit_height` | scalar | Conduit height |
 | Springing Height | `springing_height` | scalar | horseshoe/special shapes |
 | Number of Barrels | `number_of_barrels` | scalar |  |
-| Length | `conduit_length` | scalar | InfoWorks pipe length; SWMM uses `length` |
+| Length | `conduit_length` | scalar | InfoWorks pipe length |
 | Upstream Invert | `us_invert` | scalar | |
 | Downstream Invert | `ds_invert` | scalar | |
 | Gradient | `gradient` | scalar | invert slope |

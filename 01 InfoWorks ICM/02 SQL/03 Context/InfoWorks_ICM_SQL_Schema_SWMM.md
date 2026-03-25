@@ -54,10 +54,10 @@ Source: Autodesk Help `Network Data Fields` index page.
 | Object | Data Fields Topic | Internal Table |
 |--------|-------------------|----------------|
 | Node | Node Data Fields (SWMM) | `sw_node` |
-| Unit hydrograph group | Unit Hydrograph Group Data Fields (SWMM) | `sw_unit_hydrograph_group` |
-| Unit hydrograph | Unit Hydrograph Data Fields (SWMM) | `sw_unit_hydrograph` |
-| Storage curve | Storage Curve Data Fields (SWMM) | `sw_storage_curve` |
-| Tidal curve | Tidal Curve Data Fields (SWMM) | `sw_tidal_curve` |
+| Unit hydrograph group | Unit Hydrograph Group Data Fields (SWMM) | `sw_uh_group` |
+| Unit hydrograph | Unit Hydrograph Data Fields (SWMM) | `sw_uh` |
+| Storage curve | Storage Curve Data Fields (SWMM) | `sw_curve_storage` |
+| Tidal curve | Tidal Curve Data Fields (SWMM) | `sw_curve_tidal` |
 
 ### Links Grid
 
@@ -140,7 +140,7 @@ All SWMM field tables are indexed here. For common fields (`user_text_*`, `user_
 | Unit Hydrograph Area | `unit_hydrograph_area` | scalar | |
 | Ground Level | `ground_level` | scalar | |
 | Invert Elevation | `invert_elevation` | scalar | SWMM node invert |
-| Maximum Depth | `maximum_depth` | scalar | SWMM node depth; InfoWorks uses `chamber_floor_level` |
+| Maximum Depth | `maximum_depth` | scalar | SWMM node depth |
 | Surcharge Depth | `surcharge_depth` | scalar | SWMM surcharge depth |
 | Initial Depth | `initial_depth` | scalar | SWMM initial condition |
 | Ponded Area | `ponded_area` | scalar | surface flooding ponded area |
@@ -155,7 +155,7 @@ All SWMM field tables are indexed here. For common fields (`user_text_*`, `user_
 | Tidal Curve ID | `tidal_curve_id` | scalar | outfall using sw_tidal_curve |
 | Fixed Stage | `fixed_stage` | scalar | outfall fixed stage level |
 | Storage Type | `storage_type` | scalar | 'TABULAR', 'FUNCTIONAL' |
-| Storage Curve | `storage_curve` | scalar | links to sw_storage_curve |
+| Storage Curve | `storage_curve` | scalar | links to sw_curve_storage |
 | Functional Coefficient | `functional_coefficient` | scalar | A×H^B + C |
 | Functional Constant | `functional_constant` | scalar |  |
 | Functional Exponent | `functional_exponent` | scalar |  |
@@ -174,7 +174,7 @@ All SWMM field tables are indexed here. For common fields (`user_text_*`, `user_
 
 > Common data fields (`user_text_1`–`10`, `user_number_1`–`10`, `notes`, `hyperlinks`) apply to this object — see `Schema_Common.md`.
 
-#### Unit Hydrograph Group (`sw_unit_hydrograph_group`)
+#### Unit Hydrograph Group (`sw_uh_group`)
 
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
@@ -194,7 +194,7 @@ All SWMM field tables are indexed here. For common fields (`user_text_*`, `user_
 | Unit Hydrograph Nov | `uh_nov` | scalar | Monthly group reference |
 | Unit Hydrograph Dec | `uh_dec` | scalar | Monthly group reference |
 
-#### Unit Hydrograph (`sw_unit_hydrograph`)
+#### Unit Hydrograph (`sw_uh`)
 
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
@@ -219,7 +219,7 @@ All SWMM field tables are indexed here. For common fields (`user_text_*`, `user_
 | Drec3 | `Drec3` | scalar | RTK parameter |
 | D03 | `D03` | scalar | RTK parameter |
 
-#### Storage Curve (`sw_storage_curve`)
+#### Storage Curve (`sw_curve_storage`)
 
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
@@ -227,7 +227,7 @@ All SWMM field tables are indexed here. For common fields (`user_text_*`, `user_
 | Depth | `data.depth` | blob | Curve data field |
 | Surface Area | `data.surface_area` | blob | Curve data field |
 
-#### Tidal Curve (`sw_tidal_curve`)
+#### Tidal Curve (`sw_curve_tidal`)
 
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
@@ -239,7 +239,7 @@ All SWMM field tables are indexed here. For common fields (`user_text_*`, `user_
 
 #### Conduit (`sw_conduit`)
 
-> ⚠️ **CORRECTION:** Previous schema incorrectly listed `geom1`/`geom2`/`barrels`/`xsec_type` as SWMM conduit fields. SWMM SQL scripts in this repository confirm `conduit_width`, `conduit_height`, `number_of_barrels`, and `shape` are the correct SQL field names.
+> **CORRECTION:** Previous schema incorrectly listed `geom1`/`geom2`/`barrels`/`xsec_type` as SWMM conduit fields. SWMM SQL scripts in this repository confirm `conduit_width`, `conduit_height`, `number_of_barrels`, and `shape` are the correct SQL field names.
 
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
