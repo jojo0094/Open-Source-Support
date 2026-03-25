@@ -436,7 +436,7 @@ Unless stated otherwise for a specific object, every `sw_*` network object in th
 | Pervious storage depth | `storage_pervious` | scalar | Depression storage pervious |
 | Percent no storage | `percent_no_storage` | scalar | Percentage with no depression storage |
 | Routing | `route_to` | scalar | 'Outlet', 'Impervious', 'Pervious' |
-| Infiltration model | `infiltration` | scalar | `'Default'`, `'Horton'`, `'Modified_Horton'`, `'Green_Ampt'`, `'Modified_Green_Ampt'`, `'Curve_number'` |
+| Infiltration model | `infiltration` | scalar | 'Default', 'Horton', 'Modified_Horton', 'Green_Ampt', 'Modified_Green_Ampt', 'Curve_number' |
 | Percent routed | `percent_routed` | scalar | Percentage of flow routed |
 | Initial infiltration | `initial_infiltration` | scalar | Horton/GA initial rate |
 | Limiting infiltration | `limiting_infiltration` | scalar | Horton/GA limiting rate |
@@ -712,7 +712,7 @@ Unless stated otherwise for a specific object, every `sw_*` network object in th
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
 | ID | `definition_id` | scalar | |
-| Number of depth bands | `number_of_bands` | scalar | |
+| Number of depth bands | `number_of_bands` | scalar | '1', '2', '3' |
 | Roughness 1 (Manning's n) | `roughness_1` | scalar | |
 | Depth threshold 1 | `depth_thld_1` | scalar | |
 | Roughness 2 (Manning's n) | `roughness_2` | scalar | |
@@ -805,7 +805,7 @@ Unless stated otherwise for a specific object, every `sw_*` network object in th
 | UI Label | Database Field | Type | Notes |
 |----------|----------------|------|-------|
 | Name | `line_id` | scalar | |
-| Boundary line type | `line_type` | scalar | UI: Vertical wall, Critical depth, Supercritical, Dry, Normal depth, Inflow, Level, Level & head/discharge |
+| Boundary line type | `line_type` | scalar | 'Vertical wall', 'Critical depth', 'Supercritical', 'Dry', 'Normal depth', 'Inflow', 'Level', 'Level & head/discharge' |
 | Bed load boundary type | `bed_load_boundary` | scalar | |
 | Suspended load boundary type | `suspended_load_boundary` | scalar | |
 | Head unit flow table | `head_unit_discharge_id` | scalar | |
