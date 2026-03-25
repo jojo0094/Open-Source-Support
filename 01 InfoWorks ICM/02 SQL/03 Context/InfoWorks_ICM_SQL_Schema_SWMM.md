@@ -64,23 +64,23 @@ Source: Autodesk Help `Network Data Fields` index page.
 | Object | Data Fields Topic | Internal Table |
 |--------|-------------------|----------------|
 | Conduit | Conduit Data Fields (SWMM) | `sw_conduit` |
-| Control curve | Control Curve Data Fields (SWMM) | `sw_curve_control` |
 | Shape curve | Shape Curve Data Fields (SWMM) | `sw_curve_shape` |
-| Orifice | Orifice Curve Data Fields | `sw_orifice` |
-| Outlet | Outlet Curve Data Fields | `sw_outlet` |
+| Orifice | Orifice Data Fields (SWMM) | `sw_orifice` |
 | Pump | Pump Data Fields (SWMM) | `sw_pump` |
 | Pump curve | Pump Curve Data Fields (SWMM) | `sw_curve_pump` |
-| Rating curve | Rating Curve Data Fields (SWMM) | `sw_curve_rating` |
-| Transect | Transect Data Fields (SWMM) | `sw_transect` |
 | Weir | Weir Data Fields (SWMM) | `sw_weir` |
 | Weir curve | Weir Curve Data Fields (SWMM) | `sw_curve_weir` |
+| Outlet | Outlet Data Fields (SWMM) | `sw_outlet` |
+| Rating curve | Rating Curve Data Fields (SWMM) | `sw_curve_rating` |
+| Transect | Transect Data Fields (SWMM) | `sw_transect` |
+| Control curve | Control Curve Data Fields (SWMM) | `sw_curve_control` |
 
 ### Subcatchments Grid
 
 | Object | Data Fields Topic | Internal Table |
 |--------|-------------------|----------------|
 | Subcatchment | Subcatchment Data Fields (SWMM) | `sw_subcatchment` |
-| Land use | Land Use Data Field (SWMM) | `sw_land_use` |
+| Land use | Land Use Data Fields (SWMM) | `sw_land_use` |
 | Pollutant | Pollutant Data Fields (SWMM) | `sw_pollutant` |
 | Snow pack | Snow Pack Data Fields (SWMM) | `sw_snow_pack` |
 | LID control | LID Controls Data Fields (SWMM) | `sw_suds_control` |
@@ -92,17 +92,16 @@ Source: Autodesk Help `Network Data Fields` index page.
 
 | Object | Data Fields Topic | Internal Table |
 |--------|-------------------|----------------|
+| 2D zone | 2D Zone Data Fields (SWMM) | `sw_2d_zone` |
+| Mesh zone | Mesh Zone Data Fields (SWMM) | `sw_mesh_zone` |
+| Mesh level zone | Mesh Level Zone Data Fields (SWMM) | `sw_mesh_level_zone` |
+| Porous polygon | Porous Polygon Data Fields (SWMM) | `sw_porous_polygon` |
+| Roughness zone | Roughness Zone Data Fields (SWMM) | `sw_roughness_zone` |
+| Roughness definition | Roughness Definition Data Fields (SWMM) | `sw_roughness_definition` |
 | Polygon | Polygon Data Fields (SWMM) | `sw_polygon` |
 | TVD connector | TVD Connector Data Fields (SWMM) | `sw_tvd_connector` |
 | Spatial rain zone | Spatial Rain Zone Data Fields (SWMM) | `sw_spatial_rain_zone` |
 | Spatial rain source | Spatial Rain Source Data Fields (SWMM) | `sw_spatial_rain_source` |
-| 2D zone | 2D Zone Data Fields (SWMM) | `sw_2d_zone` |
-| Roughness zone | Roughness Zone Data Fields (SWMM) | `sw_roughness_zone` |
-| Roughness definitions | Roughness Definition Data Fields (SWMM) | `sw_roughness_definition` |
-| Mesh zone | Mesh Zone Data Fields (SWMM) | `sw_mesh_zone` |
-| Mesh level zone | Mesh Level Zone Data Fields (SWMM) | `sw_mesh_level_zone` |
-| Porous polygon | Porous Polygon Data Fields (SWMM) | `sw_porous_polygon` |
-| IC zone - hydraulics (2D) | IC Zone - hydraulics (2D) Data Fields (SWMM) | `sw_2d_ic_polygon` |
 
 ### Lines Grid
 
@@ -303,6 +302,7 @@ All SWMM field tables are indexed here. For common fields (`user_text_*`, `user_
 | ID | `id` | scalar | SWMM object identifier |
 | Upstream Node ID | `us_node_id` | scalar | Common link identifier |
 | Downstream Node ID | `ds_node_id` | scalar | Common link identifier |
+| Type | `link_type` | scalar | Orifice type |
 | Shape | `shape` | scalar | Orifice shape field |
 | Orifice Height | `orifice_height` | scalar | Physical geometry field |
 | Orifice Width | `orifice_width` | scalar | Physical geometry field |
@@ -334,6 +334,7 @@ All SWMM field tables are indexed here. For common fields (`user_text_*`, `user_
 | ID | `id` | scalar | SWMM object identifier |
 | Upstream Node ID | `us_node_id` | scalar | Common link identifier |
 | Downstream Node ID | `ds_node_id` | scalar | Common link identifier |
+| Weir Type | `link_type` | scalar | Weir type |
 | Crest | `crest` | scalar | Weir crest level |
 | Weir Height | `weir_height` | scalar | SWMM weir geometry |
 | Weir Width | `weir_width` | scalar | SWMM weir geometry |
