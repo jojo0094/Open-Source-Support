@@ -49,7 +49,7 @@ net.row_objects('cams_property').each do |prop|
 			postcode = (prop.property_postalcode.nil? || prop.property_postalcode.strip.empty?) ? '' : prop.property_postalcode
 			prop_name = (prop.property_name.nil? || prop.property_name.strip.empty?) ? '' : prop.property_name
 			survey_filename = (att[1].nil? || att[1].strip.empty?) ? '' : att[1]
-			new_filename = "#{postcode}_#{prop_name}_#{survey_filename}_LocationView"
+			new_filename = "#{postcode}#{prop_name}_#{survey_filename}_Loc.View"
 			current_attachments[n].purpose = 'Location view'
 			current_attachments[n].filename = new_filename
 			current_attachments[n].description = att[2]
