@@ -1,6 +1,20 @@
 require 'rexml/document'
 include REXML
 
+## VSA-KEK codes where Quantifizierung1 represents a percentage fraction (field:percentage).
+## For all other codes Quantifizierung1 is a diameter dimension (field:diameter) and
+## Quantifizierung2 is a distance/intrusion dimension (field:intrusion).
+QUANTIFIZIERUNG_PERCENTAGE_CODES = %w[
+  BAAA BAA8
+  BAI BAIAA BAIAB BAIAC BAIAG BAIAZ
+  BAJA
+  BAKAA BAKAB BAKODA BAKODB BAKOE BAKOEO BAKED BAKEF
+  BAKJ BAKJA BAKJB BAKJC
+  BBAA BBAB BBAC BBAD BBAE BBAF BBAG BBAH BBAI BBAJ BBAK BBAL BBAM BBAN BBAO BBAP BBAZ
+  BBBA BBBB BBBC BBBD BBBE BBBF BBBG BBBH BBBI BBBJ BBBK BBBL BBBM BBBN BBBO BBBP BBBZ
+  BCDA BCDB BCDC
+].freeze
+
 ## Function to read and process the XML file
 def process_xml(file_path)
   ## Open and parse the XML file
@@ -121,8 +135,12 @@ else
 				details_row[n].video_no2 = details[:videozaehlerstand]
 				details_row[n].distance = details[:distanz]
 				details_row[n].code = details[:kanalschadencode]
-				details_row[n].diameter = details[:quantifizierung1]
-				details_row[n].intrusion = details[:quantifizierung2]
+			if QUANTIFIZIERUNG_PERCENTAGE_CODES.include?(details[:kanalschadencode])
+					details_row[n].percentage = details[:quantifizierung1]
+				else
+					details_row[n].diameter   = details[:quantifizierung1]
+					details_row[n].intrusion  = details[:quantifizierung2]
+				end
 			clock_at = details[:schadenlageanfang] == '12' ? '0' : details[:schadenlageanfang]	## Convert Clock At 12 to 0.
 			clock_to = details[:schadenlageende] == '12' ? '0' : details[:schadenlageende]		## Convert Clock To 12 to 0.
 			clock_to = '12' if clock_at == '0' && clock_to == '0'							## Full-circumference defect: both values resolving to 0 means the defect wraps the full pipe, correct to 0-12.
